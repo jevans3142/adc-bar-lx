@@ -1,6 +1,7 @@
 // Low-level screen driver module
 //-----------------------------------
 
+#include <string.h>
 #include "driver/i2c.h"
 
 #include "screen_driver.h"
@@ -107,4 +108,27 @@ void enable_display(void)
 void disable_display(void)
 {
     display_command(0xAE);
+}
+
+void clear_display(void)
+{
+    memset(buffer, 0, (SH1106_LCDWIDTH*SH1106_LCDHEIGHT/8));
+}
+
+void draw_pixel(int16_t x, int16_t y, uint16_t type)
+{
+    if ((x < 0) || (x >= SH1106_LCDWIDTH ) || (y < 0) || (y >= SH1106_LCDHEIGHT)) { return; }
+    switch (type) 
+    {
+      case WHITE:   
+        buffer[x+ (y/8)*SH1106_LCDWIDTH] |=  (1 << (y&7)); 
+        break;
+      case BLACK:   
+        buffer[x+ (y/8)*SH1106_LCDWIDTH] &= ~(1 << (y&7)); 
+        break; 
+      case INVERT:  
+        buffer[x+ (y/8)*SH1106_LCDWIDTH] ^=  (1 << (y&7)); 
+        break; 
+    }
+
 }
