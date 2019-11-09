@@ -10,9 +10,10 @@
 
 #include "main.h"
 #include "dmx_io.h"
+#include "screen_driver.h"
 
 void app_main(void)
 {
     xTaskCreate(dmx_output_task, "dmx_output_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
-
+    enable_display();
 }
