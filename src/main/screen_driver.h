@@ -26,6 +26,9 @@
 #define INVERT 2
 #define LEAVE 3
 
+#define NORMAL_SIZE 0
+#define DOUBLE_SIZE 1
+
 
 void refresh_display(void);
 void enable_display(void);
@@ -34,5 +37,7 @@ void clear_display(void);
 void draw_pixel(int16_t x, int16_t y, uint16_t type);
 void draw_line(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t type);
 void draw_rect(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t outline, uint16_t fill);
+void draw_circle(int16_t xc, int16_t yc, int16_t r, uint16_t outline, uint16_t fill);
+void draw_string(uint_fast8_t x, uint_fast8_t y, const char* s, uint_fast8_t scaling, uint_fast8_t type);
 
 #endif  
