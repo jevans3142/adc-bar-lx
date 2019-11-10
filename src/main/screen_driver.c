@@ -138,7 +138,7 @@ void draw_line(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t type)
 {  
     int16_t dx, dy, sx, sy, err, e2;
 
-    dx =  abs(x2-x1);
+    dx = abs(x2-x1);
     if (x1<x2) { sx = 1; } else { sx = -1; }
     dy = -abs(y2-y1);
     if (y1<y2) { sy = 1; } else { sy = -1; }
@@ -159,4 +159,31 @@ void draw_line(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t type)
         }
         draw_pixel(x1,y1,type);
     }
+}
+
+void draw_rect(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t outline, uint16_t fill)
+{
+    int16_t dx, dy, sx, sy, x, y;
+
+    dx = abs(x2-x1);
+    dy = abs(y2-y1);
+    if (x1<x2) { sx = 1; } else { sx = -1; }
+    if (y1<y2) { sy = 1; } else { sy = -1; }
+    
+    draw_line(x1,y1,x1,y2,outline);
+    draw_line(x1,y1,x2,y1,outline);
+    draw_line(x2,y2,x1,y2,outline);
+    draw_line(x2,y2,x2,y1,outline);
+
+    if (fill != LEAVE)
+    {
+        for ( x = x1 + sx; x != x2; x=x+sx) 
+        {
+            for ( y = y1 + sy; y != y2; y=y+sy) 
+            {
+                draw_pixel(x,y,fill);
+            }
+        }
+    }
+
 }
