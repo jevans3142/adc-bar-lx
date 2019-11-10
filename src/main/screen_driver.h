@@ -29,5 +29,6 @@ void enable_display(void);
 void disable_display(void);
 void clear_display(void);
 void draw_pixel(int16_t x, int16_t y, uint16_t type);
+void draw_line(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t type);
 
 #endif  
