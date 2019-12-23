@@ -11,9 +11,16 @@
 #include "main.h"
 #include "dmx_io.h"
 #include "screen_driver.h"
+#include "button_polling.h"
+#include "redraw_screen.h"
 
 void app_main(void)
 {
     xTaskCreate(dmx_output_task, "dmx_output_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
+    xTaskCreate(button_poll_task, "button_poll_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
     enable_display();
+    vTaskDelay(200);
+    redraw_screen(0);
+    vTaskDelay(200);
+    redraw_screen(1);
 }
