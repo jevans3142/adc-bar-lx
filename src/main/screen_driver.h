@@ -4,10 +4,12 @@
 #ifndef SCREEN_DRIVER_H_INCLUDED
 #define SCREEN_DRIVER_H_INCLUDED
 
+#include "freertos/FreeRTOS.h"
+
 #define PIN_I2C_SCL (22)               
 #define PIN_I2C_SDA (21)              
 #define I2C_NUM I2C_NUM_0        
-#define I2C_FREQ 100000        
+#define I2C_FREQ 200000        
 #define I2C_TX_BUFFER 0                     
 #define I2C_RX_BUFFER 0                          
 #define I2C_DISPLAY_ADDRESS 0x3c
@@ -32,6 +34,7 @@
 
 void refresh_display(void);
 void enable_display(void);
+void reenable_display(void);
 void disable_display(void);
 void clear_display(void);
 void draw_pixel(int16_t x, int16_t y, uint16_t type);
