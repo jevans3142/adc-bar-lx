@@ -4,8 +4,20 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
 
+
 #include "redraw_screen.h"
 #include "screen_driver.h"
+
+//Define states and mutexs
+SemaphoreHandle_t Screen_No_Mutex = NULL;
+int Screen_No = 0; 
+SemaphoreHandle_t Menu_Selected_Mutex = NULL;
+int Menu_Selected = 0; 
+
+void setup_menu_mutexs(void)
+{
+    Screen_No_Mutex = xSemaphoreCreateMutex();
+}
 
 static void draw_menu_symbols(void)
 {
@@ -30,7 +42,6 @@ void set_screen(int new_screen_no)
     }
 }
 
-//TODO: Is this overkill? Is the mutex required ie. are writes to int atomic on ESP32?
 int get_screen(void)
 {
     if( Screen_No_Mutex != NULL )

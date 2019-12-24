@@ -15,15 +15,10 @@
 #include "button_polling.h"
 #include "redraw_screen.h"
 
-//Define state and mutex
-SemaphoreHandle_t Screen_No_Mutex = NULL;
-int Screen_No = 0; 
-
-
 void app_main(void)
 {
-    Screen_No_Mutex = xSemaphoreCreateMutex();
-    
+    setup_menu_mutexs();
+
     xTaskCreate(dmx_output_task, "dmx_output_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
     xTaskCreate(button_poll_task, "button_poll_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
 
