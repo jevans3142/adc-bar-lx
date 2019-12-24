@@ -62,7 +62,7 @@ void redraw_screen(int screen_no)
 
     switch (screen_no)
     {
-        case 0 : //Main status screen
+        case SCREEN_MAIN_STATUS :
             draw_line(0,28,128,28, WHITE);
             draw_line(64,28,64,64, WHITE);
             draw_string(8,12,"1",NORMAL_SIZE, WHITE);
@@ -73,7 +73,7 @@ void redraw_screen(int screen_no)
             draw_string(12,40,"OFF",DOUBLE_SIZE, WHITE);
             break;  
 
-        case 1 : //Main menu
+        case SCREEN_MAIN_MENU :
             draw_menu_symbols();
 
             draw_string(0,0,"Main Menu",NORMAL_SIZE, WHITE);
@@ -88,7 +88,7 @@ void redraw_screen(int screen_no)
             draw_string(0,12,"^",NORMAL_SIZE, WHITE);
             break;
 
-        case 2 : //S2L Settings
+        case SCREEN_S2L_MENU :
             draw_menu_symbols();
 
             draw_string(0,0,"Sound To Light Menu",NORMAL_SIZE, WHITE);
@@ -103,24 +103,24 @@ void redraw_screen(int screen_no)
             draw_string(0,12,"^",NORMAL_SIZE, WHITE);
             break;
 
-        case 10 : // Record Scene
+        case SCREEN_RECORD_SCENE :
             break;
-        case 11 : // Fade Time
+        case SCREEN_FADE_TIME : 
             break;
-        case 12 : // DMX Input Mode
+        case SCREEN_DMX_MODE : 
             break;
-        case 13 : // Lock Controls
+        case SCREEN_LOCK_CTRLS : 
             break;
 
-        case 20 : // S2L Mode
+        case SCREEN_S2L_MODE : 
             break;
-        case 21 : // S2L High Ch
+        case SCREEN_S2L_H_CH :
             break;
-        case 22 : // S2L Mid High Ch 
+        case SCREEN_S2L_MH_CH : 
             break;
-        case 23 : // S2L Mid Low Ch
+        case SCREEN_S2L_ML_CH : 
             break;
-        case 24 : // S2L Low Ch
+        case SCREEN_S2L_L_CH : 
             break;
 
         

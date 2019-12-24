@@ -6,7 +6,6 @@
 #include "freertos/task.h"
 
 #include "button_polling.h"
-
 #include "redraw_screen.h"
 
 static void menu_button_do(void)
@@ -14,32 +13,34 @@ static void menu_button_do(void)
 
     switch (get_screen())
     {
-        case 0://Main status screen
+        case SCREEN_MAIN_STATUS :
             set_screen(1);
             break;
-        case 1://Main menu
+        case SCREEN_MAIN_MENU :
             set_screen(0);
             break;
-        case 2://S2L Settings
+        case SCREEN_S2L_MENU :
             set_screen(1);
             break;
-        case 10 : // Record Scene
+
+        case SCREEN_RECORD_SCENE :
             break;
-        case 11 : // Fade Time
+        case SCREEN_FADE_TIME : 
             break;
-        case 12 : // DMX Input Mode
+        case SCREEN_DMX_MODE : 
             break;
-        case 13 : // Lock Controls
+        case SCREEN_LOCK_CTRLS : 
             break;
-        case 20 : // S2L Mode
+
+        case SCREEN_S2L_MODE : 
             break;
-        case 21 : // S2L High Ch
+        case SCREEN_S2L_H_CH :
             break;
-        case 22 : // S2L Mid High Ch 
+        case SCREEN_S2L_MH_CH : 
             break;
-        case 23 : // S2L Mid Low Ch
+        case SCREEN_S2L_ML_CH : 
             break;
-        case 24 : // S2L Low Ch
+        case SCREEN_S2L_L_CH : 
             break;
     }
 }
