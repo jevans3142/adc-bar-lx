@@ -4,8 +4,6 @@
 #ifndef BUTTON_POLLING_H_INCLUDED
 #define BUTTON_POLLING_H_INCLUDED
 
-#include "freertos/FreeRTOS.h"
-
 #define BUTTON_POLL_INTERVAL_MS ( 10 / portTICK_PERIOD_MS)
 
 #define PIN_MENU_BUTTON 15

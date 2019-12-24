@@ -6,9 +6,41 @@
 
 #include "button_polling.h"
 
-static void menu_button_do(void)
-{
+#include "redraw_screen.h"
 
+static void menu_button_do(void)
+{   
+    
+    switch (get_screen())
+    {
+        case 0://Main status screen
+            set_screen(1);
+            break;
+        case 1://Main menu
+            set_screen(0);
+            break;
+        case 2://S2L Settings
+            set_screen(1);
+            break;
+        case 10 : // Record Scene
+            break;
+        case 11 : // Fade Time
+            break;
+        case 12 : // DMX Input Mode
+            break;
+        case 13 : // Lock Controls
+            break;
+        case 20 : // S2L Mode
+            break;
+        case 21 : // S2L High Ch
+            break;
+        case 22 : // S2L Mid High Ch 
+            break;
+        case 23 : // S2L Mid Low Ch
+            break;
+        case 24 : // S2L Low Ch
+            break;
+    }
 }
 
 static void set_button_do(void)
