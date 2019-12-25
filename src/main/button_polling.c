@@ -14,51 +14,195 @@ static void menu_button_do(void)
     switch (get_screen())
     {
         case SCREEN_MAIN_STATUS :
-            set_screen(1);
+            set_screen(SCREEN_MAIN_MENU,0);
             break;
         case SCREEN_MAIN_MENU :
-            set_screen(0);
-            break;
-        case SCREEN_S2L_MENU :
-            set_screen(1);
+            set_screen(SCREEN_MAIN_STATUS,0);
             break;
 
         case SCREEN_RECORD_SCENE :
-            break;
         case SCREEN_FADE_TIME : 
-            break;
         case SCREEN_DMX_MODE : 
-            break;
+        case SCREEN_S2L_MENU :
         case SCREEN_LOCK_CTRLS : 
+            set_screen(SCREEN_MAIN_MENU,get_screen()-10);
+            break;
+        
+        case SCREEN_S2L_MODE :
+        case SCREEN_S2L_H_CH : 
+        case SCREEN_S2L_MH_CH : 
+        case SCREEN_S2L_ML_CH : 
+        case SCREEN_S2L_L_CH :  
+            set_screen(SCREEN_S2L_MENU,get_screen()-20);
             break;
 
-        case SCREEN_S2L_MODE : 
-            break;
-        case SCREEN_S2L_H_CH :
-            break;
-        case SCREEN_S2L_MH_CH : 
-            break;
-        case SCREEN_S2L_ML_CH : 
-            break;
-        case SCREEN_S2L_L_CH : 
-            break;
     }
 }
 
 static void set_button_do(void)
 {
-    
+     switch (get_screen())
+    {
+        case SCREEN_MAIN_STATUS : //No action
+            break;
+        case SCREEN_MAIN_MENU :
+            set_screen(get_menu_selected()+10,0);
+            break;
+        case SCREEN_S2L_MENU :
+            set_screen(get_menu_selected()+20,0);
+            break;
+
+        case SCREEN_RECORD_SCENE :
+            
+            break;
+        case SCREEN_FADE_TIME : 
+            
+            break;
+        case SCREEN_DMX_MODE : 
+            
+            break;
+        case SCREEN_LOCK_CTRLS : 
+            
+            break;
+
+        case SCREEN_S2L_MODE : 
+            
+            break;
+        case SCREEN_S2L_H_CH :
+           
+            break;
+        case SCREEN_S2L_MH_CH : 
+            
+            break;
+        case SCREEN_S2L_ML_CH : 
+            
+            break;
+        case SCREEN_S2L_L_CH :  
+
+            break;
+    }
 }
 
 static void up_button_do(void)
 {
-    
+    switch (get_screen())
+    {
+        case SCREEN_MAIN_STATUS : // No action
+            break;
+        case SCREEN_MAIN_MENU : 
+        case SCREEN_S2L_MENU : 
+            if (get_menu_selected()<1)
+            {
+                set_menu_selected(4);
+            }
+            else
+            {
+                set_menu_selected(get_menu_selected()-1);
+            }
+            redraw_screen(get_screen());
+            break;
+
+        case SCREEN_RECORD_SCENE :
+            
+            break;
+        case SCREEN_FADE_TIME : 
+            
+            break;
+        case SCREEN_DMX_MODE : 
+            
+            break;
+        case SCREEN_LOCK_CTRLS : 
+            
+            break;
+
+        case SCREEN_S2L_MODE : 
+            
+            break;
+        case SCREEN_S2L_H_CH :
+           
+            break;
+        case SCREEN_S2L_MH_CH : 
+            
+            break;
+        case SCREEN_S2L_ML_CH : 
+            
+            break;
+        case SCREEN_S2L_L_CH :  
+
+            break;
+    }
 }
 
 static void down_button_do(void)
 {
-    
+switch (get_screen())
+    {
+        case SCREEN_MAIN_STATUS : //No action
+            break;
+        case SCREEN_MAIN_MENU :
+        case SCREEN_S2L_MENU :
+            if (get_menu_selected()<4)
+            {
+                set_menu_selected((get_menu_selected()+1));
+            }
+            else
+            {
+                set_menu_selected(0);
+            }
+            redraw_screen(get_screen());
+            break;
+
+        case SCREEN_RECORD_SCENE :
+            
+            break;
+        case SCREEN_FADE_TIME : 
+            
+            break;
+        case SCREEN_DMX_MODE : 
+            
+            break;
+        case SCREEN_LOCK_CTRLS : 
+            
+            break;
+
+        case SCREEN_S2L_MODE : 
+            
+            break;
+        case SCREEN_S2L_H_CH :
+           
+            break;
+        case SCREEN_S2L_MH_CH : 
+            
+            break;
+        case SCREEN_S2L_ML_CH : 
+            
+            break;
+        case SCREEN_S2L_L_CH :  
+
+            break;
+    }
 }
+
+/*static void button_debounce()
+{
+    if (gpio_get_level(PIN_MENU_BUTTON))
+    {
+        menu_counter = 0;
+        if (menu_state != 0)
+        {
+            menu_state = 0;
+            menu_button_do();
+        }       
+    }
+    else
+    {
+        menu_counter++;
+    }
+    if (menu_counter >= BUTTON_DEBOUNCE_TICKS)
+    {
+        menu_state = 1;   
+    }
+}*/
 
 void button_poll_task(void)
 {

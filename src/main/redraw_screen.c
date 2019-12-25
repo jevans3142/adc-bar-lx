@@ -4,7 +4,6 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
 
-
 #include "redraw_screen.h"
 #include "screen_driver.h"
 
@@ -12,12 +11,7 @@
 SemaphoreHandle_t Screen_No_Mutex = NULL;
 int Screen_No = 0; 
 SemaphoreHandle_t Menu_Selected_Mutex = NULL;
-int Menu_Selected = 0; 
-
-void setup_menu_mutexs(void)
-{
-    Screen_No_Mutex = xSemaphoreCreateMutex();
-}
+int Menu_Selected = 10; 
 
 static void draw_menu_symbols(void)
 {
@@ -28,13 +22,20 @@ static void draw_menu_symbols(void)
     draw_string(120,48,"~",NORMAL_SIZE, WHITE);
 }
 
+void setup_menu_mutexs(void)
+{
+    Screen_No_Mutex = xSemaphoreCreateMutex();
+    Menu_Selected_Mutex = xSemaphoreCreateMutex();
+}
+
 //TODO: better exception handling here 
-void set_screen(int new_screen_no)
+void set_screen(int new_screen_no, int new_menu_selected)
 {
     if( Screen_No_Mutex != NULL )
     {
         if( xSemaphoreTake( Screen_No_Mutex, ( TickType_t ) 10 ) == pdTRUE )
         {
+            set_menu_selected(new_menu_selected);
             Screen_No = new_screen_no;
             redraw_screen(new_screen_no);
             xSemaphoreGive( Screen_No_Mutex );
@@ -48,8 +49,35 @@ int get_screen(void)
     {
         if( xSemaphoreTake( Screen_No_Mutex, ( TickType_t ) 10 ) == pdTRUE )
         {
+            int returnval = Screen_No;
             xSemaphoreGive( Screen_No_Mutex );
-            return Screen_No;
+            return returnval;
+        }
+    }
+    return NULL;
+}
+
+void set_menu_selected(int new_menu_selected)
+{
+    if( Menu_Selected_Mutex != NULL )
+    {
+        if( xSemaphoreTake( Menu_Selected_Mutex, ( TickType_t ) 10 ) == pdTRUE )
+        {
+            Menu_Selected = new_menu_selected;
+            xSemaphoreGive( Menu_Selected_Mutex );
+        }
+    }
+}
+
+int get_menu_selected(void)
+{
+    if( Menu_Selected_Mutex != NULL )
+    {
+        if( xSemaphoreTake( Menu_Selected_Mutex, ( TickType_t ) 10 ) == pdTRUE )
+        {
+            int returnval = Menu_Selected;
+            xSemaphoreGive( Menu_Selected_Mutex );
+            return returnval;
         }
     }
     return NULL;
@@ -85,7 +113,7 @@ void redraw_screen(int screen_no)
             draw_string(8,44,"Lock Controls",NORMAL_SIZE, WHITE);
 
             //Actually the menu position cursor
-            draw_string(0,12,"^",NORMAL_SIZE, WHITE);
+            draw_string(0,(12+8*get_menu_selected()),"^",NORMAL_SIZE, WHITE);
             break;
 
         case SCREEN_S2L_MENU :
@@ -100,10 +128,25 @@ void redraw_screen(int screen_no)
             draw_string(8,44,"Low Channel",NORMAL_SIZE, WHITE);
 
             //Actually the menu position cursor
-            draw_string(0,12,"^",NORMAL_SIZE, WHITE);
+            draw_string(0,(12+8*get_menu_selected()),"^",NORMAL_SIZE, WHITE);
             break;
 
         case SCREEN_RECORD_SCENE :
+            draw_menu_symbols();
+
+            draw_string(0,0,"Record Scene",NORMAL_SIZE, WHITE);
+
+            if (get_menu_selected() == 0)
+            {
+                draw_string(8,12,"Select scene to",NORMAL_SIZE, WHITE);
+                draw_string(8,20,"overwrite:",NORMAL_SIZE, WHITE);
+                
+            }
+            else
+            {
+
+            }
+
             break;
         case SCREEN_FADE_TIME : 
             break;
