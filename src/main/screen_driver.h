@@ -9,7 +9,7 @@
 #define PIN_I2C_SCL (22)               
 #define PIN_I2C_SDA (21)              
 #define I2C_NUM I2C_NUM_0        
-#define I2C_FREQ 200000        
+#define I2C_FREQ 400000     
 #define I2C_TX_BUFFER 0                     
 #define I2C_RX_BUFFER 0                          
 #define I2C_DISPLAY_ADDRESS 0x3c

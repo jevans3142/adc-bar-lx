@@ -24,5 +24,5 @@ void app_main(void)
 
     enable_display();
     vTaskDelay(200);
-    redraw_screen(0);
+    set_screen(0,0);
 }

@@ -168,7 +168,5 @@ void redraw_screen(int screen_no)
 
         
     }
-    disable_display();
     refresh_display();
-    reenable_display();
 }
