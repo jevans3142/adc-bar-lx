@@ -7,6 +7,10 @@
 
 #include "button_polling.h"
 #include "redraw_screen.h"
+#include "scene_engine.h"
+
+//Remove:
+#include "screen_driver.h"
 
 static void menu_button_do(void)
 {   
@@ -183,6 +187,11 @@ switch (get_screen())
     }
 }
 
+int scene_button_decode(void)
+{
+    return ( (1 * !gpio_get_level(PIN_SCENE_BUTTONS_BIT_1)) + (2 * !gpio_get_level(PIN_SCENE_BUTTONS_BIT_2)) + (4 * !gpio_get_level(PIN_SCENE_BUTTONS_BIT_4)) );
+}
+
 /*static void button_debounce()
 {
     if (gpio_get_level(PIN_MENU_BUTTON))
@@ -209,20 +218,29 @@ void button_poll_task(void)
     gpio_config_t io_conf;
     io_conf.intr_type = GPIO_PIN_INTR_DISABLE;
     io_conf.mode = GPIO_MODE_INPUT;
-    io_conf.pin_bit_mask = PIN_BUTTONS_MASK;
+    io_conf.pin_bit_mask = PIN_MENU_BUTTONS_MASK;
     io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
     io_conf.pull_up_en = GPIO_PULLUP_ENABLE;
+    gpio_config(&io_conf);
+
+    io_conf.pin_bit_mask = PIN_SCENE_BUTTONS_MASK;
     gpio_config(&io_conf);
 
     int menu_counter = 0;
     int set_counter = 0;
     int up_counter = 0;
     int down_counter = 0;
+    int scene_counter = 0; 
+
 
     int menu_state = 0;
     int set_state = 0;
     int up_state = 0;
     int down_state = 0;
+    int scene_state = 0;
+
+    int scene_number = 0; 
+
 
     while(1) 
     {
@@ -301,6 +319,43 @@ void button_poll_task(void)
             {
                 down_state = 1;   
             }
+
+        // Scene buttons
+        int current_button_selected = scene_button_decode();
+        if (current_button_selected == 0)
+            {
+                if (scene_state != 0)
+                    {
+                        scene_state = 0;
+                        set_scene(scene_number);
+                        if (get_screen()==0)
+                        {
+                            redraw_screen(0);
+                        }
+                    }       
+                scene_counter = 0;
+                scene_number = 0;
+            }
+        else
+            {
+                if (current_button_selected==scene_number)
+                {
+                    scene_counter++;
+                }
+                else
+                {
+                    scene_counter = 0;
+                    scene_number = current_button_selected;
+                }
+
+            }
+        if (scene_counter >= BUTTON_DEBOUNCE_TICKS)
+            {
+                scene_state = 1;   
+            }
+
+    
+        
 
         vTaskDelay(BUTTON_POLL_INTERVAL_MS);
     }      
