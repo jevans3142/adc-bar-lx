@@ -192,26 +192,26 @@ int scene_button_decode(void)
     return ( (1 * !gpio_get_level(PIN_SCENE_BUTTONS_BIT_1)) + (2 * !gpio_get_level(PIN_SCENE_BUTTONS_BIT_2)) + (4 * !gpio_get_level(PIN_SCENE_BUTTONS_BIT_4)) );
 }
 
-/*static void button_debounce()
+static void button_debounce(int button_pin, int* state, int* counter, void (*button_do)())
 {
-    if (gpio_get_level(PIN_MENU_BUTTON))
+    if (gpio_get_level(button_pin))
     {
-        menu_counter = 0;
-        if (menu_state != 0)
+        *counter = 0;
+        if (*state != 0)
         {
-            menu_state = 0;
-            menu_button_do();
+            *state = 0;
+            button_do();
         }       
     }
     else
     {
-        menu_counter++;
+        *counter = *counter + 1;
     }
-    if (menu_counter >= BUTTON_DEBOUNCE_TICKS)
+    if (*counter >= BUTTON_DEBOUNCE_TICKS)
     {
-        menu_state = 1;   
+        *state = 1;   
     }
-}*/
+}
 
 void button_poll_task(void)
 {
