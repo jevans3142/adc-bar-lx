@@ -3,15 +3,28 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
+#include "freertos/task.h"
 
 #include "redraw_screen.h"
 #include "screen_driver.h"
+#include "scene_engine.h"
 
 //Define states and mutexs
 SemaphoreHandle_t Screen_No_Mutex = NULL;
 int Screen_No = 0; 
 SemaphoreHandle_t Menu_Selected_Mutex = NULL;
 int Menu_Selected = 10; 
+SemaphoreHandle_t Display_Active_Mutex = NULL;
+int Display_Active = 1; 
+unsigned long Display_Active_Timeout = 0;
+
+char c; 
+
+
+static unsigned long IRAM_ATTR millis()
+{
+    return (unsigned long) (esp_timer_get_time() / 1000ULL);
+}
 
 static void draw_menu_symbols(void)
 {
@@ -26,6 +39,64 @@ void setup_menu_mutexs(void)
 {
     Screen_No_Mutex = xSemaphoreCreateMutex();
     Menu_Selected_Mutex = xSemaphoreCreateMutex();
+    Display_Active_Mutex = xSemaphoreCreateMutex();
+
+    reset_display_active_status();
+}
+
+void display_timeout_task(void)
+{
+    while (1)
+    {
+        if (((millis()-Display_Active_Timeout) >= 60000ULL) && Display_Active)
+        {
+            if( Display_Active_Mutex != NULL )
+            {
+                if( xSemaphoreTake( Display_Active_Mutex, ( TickType_t ) 10 ) == pdTRUE )
+                {
+                    //Turn off screen
+                    Display_Active = 0;
+                    disable_display();
+                    xSemaphoreGive(Display_Active_Mutex);
+                }
+            }
+        }
+        vTaskDelay(DISPLAY_ACTIVE_INTERVAL_MS);
+    } 
+}
+
+int get_display_active_status(void)
+{
+    if( Display_Active_Mutex != NULL )
+    {
+        if( xSemaphoreTake( Display_Active_Mutex, ( TickType_t ) 10 ) == pdTRUE )
+        {
+            int returnval = Display_Active;
+            xSemaphoreGive(Display_Active_Mutex);
+            return returnval;
+        }
+    }
+    return NULL;
+}
+
+int reset_display_active_status(void)
+{
+    int returnval = 0;
+    if( Display_Active_Mutex != NULL )
+    {
+        if( xSemaphoreTake( Display_Active_Mutex, ( TickType_t ) 10 ) == pdTRUE )
+        {
+            Display_Active_Timeout = millis();
+            if (Display_Active == 0)
+            {
+                reenable_display();
+                Display_Active = 1;
+                returnval = 1; 
+            }
+            xSemaphoreGive(Display_Active_Mutex);  
+        }
+    }
+    return returnval;
 }
 
 //TODO: better exception handling here 

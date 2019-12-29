@@ -4,6 +4,8 @@
 #ifndef SCREEN_REDRAW_H_INCLUDED
 #define SCREEN_REDRAW_H_INCLUDED
 
+#define DISPLAY_ACTIVE_INTERVAL_MS ( 1000 / portTICK_PERIOD_MS)
+
 //Define screen IDs 
 
 #define SCREEN_MAIN_STATUS 0
@@ -24,6 +26,9 @@
 //-------
 
 void setup_menu_mutexs(void);
+void display_timeout_task(void);
+int get_display_active_status(void);
+int reset_display_active_status(void);
 void set_screen(int screen_no, int new_menu_selected);
 int get_screen(void);
 void set_menu_selected(int new_menu_selected);

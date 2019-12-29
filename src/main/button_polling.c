@@ -9,11 +9,12 @@
 #include "redraw_screen.h"
 #include "scene_engine.h"
 
-//Remove:
-#include "screen_driver.h"
-
 static void menu_button_do(void)
 {   
+    if (reset_display_active_status() == 1)
+    {
+        return;
+    }
 
     switch (get_screen())
     {
@@ -45,7 +46,12 @@ static void menu_button_do(void)
 
 static void set_button_do(void)
 {
-     switch (get_screen())
+    if (reset_display_active_status() == 1)
+    {
+        return;
+    }
+    
+    switch (get_screen())
     {
         case SCREEN_MAIN_STATUS : //No action
             break;
@@ -89,6 +95,11 @@ static void set_button_do(void)
 
 static void up_button_do(void)
 {
+    if (reset_display_active_status() == 1)
+    {
+        return;
+    }
+    
     switch (get_screen())
     {
         case SCREEN_MAIN_STATUS : // No action
@@ -139,7 +150,12 @@ static void up_button_do(void)
 
 static void down_button_do(void)
 {
-switch (get_screen())
+    if (reset_display_active_status() == 1)
+    {
+        return;
+    }
+
+    switch (get_screen())
     {
         case SCREEN_MAIN_STATUS : //No action
             break;
