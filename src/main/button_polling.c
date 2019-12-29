@@ -244,81 +244,10 @@ void button_poll_task(void)
 
     while(1) 
     {
-        //MENU
-        if (gpio_get_level(PIN_MENU_BUTTON))
-            {
-                menu_counter = 0;
-                if (menu_state != 0)
-                    {
-                        menu_state = 0;
-                        menu_button_do();
-                    }       
-            }
-        else
-            {
-                menu_counter++;
-            }
-        if (menu_counter >= BUTTON_DEBOUNCE_TICKS)
-            {
-                menu_state = 1;   
-            }
-
-        //SET
-        if (gpio_get_level(PIN_SET_BUTTON))
-            {
-                set_counter = 0;
-                if (set_state != 0)
-                    {
-                        set_state = 0;
-                        set_button_do();
-                    }       
-            }
-        else
-            {
-                set_counter++;
-            }
-        if (set_counter >= BUTTON_DEBOUNCE_TICKS)
-            {
-                set_state = 1;   
-            }
-
-        //UP
-        if (gpio_get_level(PIN_UP_BUTTON))
-            {
-                up_counter = 0;
-                if (up_state != 0)
-                    {
-                        up_state = 0;
-                        up_button_do();
-                    }       
-            }
-        else
-            {
-                up_counter++;
-            }
-        if (up_counter >= BUTTON_DEBOUNCE_TICKS)
-            {
-                up_state = 1;   
-            }
-
-        //DOWN
-        if (gpio_get_level(PIN_DOWN_BUTTON))
-            {
-                down_counter = 0;
-                if (down_state != 0)
-                    {
-                        down_state = 0;
-                        down_button_do();
-                    }       
-            }
-        else
-            {
-                down_counter++;
-            }
-        if (down_counter >= BUTTON_DEBOUNCE_TICKS)
-            {
-                down_state = 1;   
-            }
+        button_debounce(PIN_MENU_BUTTON, &menu_state, &menu_counter, menu_button_do);
+        button_debounce(PIN_SET_BUTTON, &set_state, &set_counter, set_button_do);
+        button_debounce(PIN_UP_BUTTON, &up_state, &up_counter, up_button_do);
+        button_debounce(PIN_DOWN_BUTTON, &down_state, &down_counter, down_button_do);
 
         // Scene buttons
         int current_button_selected = scene_button_decode();
