@@ -16,14 +16,17 @@ static unsigned long IRAM_ATTR micros()
 static void IRAM_ATTR delay_microseconds(uint32_t us)
 {
     uint32_t m = micros();
-    if(us){
+    if(us)
+    {
         uint32_t e = (m + us);
         if(m > e){ //overflow
-            while(micros() > e){
+            while(micros() > e)
+            {
                 NOP();
             }
         }
-        while(micros() < e){
+        while(micros() < e)
+        {
             NOP();
         }
     }
@@ -67,7 +70,8 @@ void dmx_output_task(void)
     uart_set_mode(uart_num, UART_MODE_RS485_HALF_DUPLEX);
 
 
-    while(1) {
+    while(1) 
+    {
         //Send DMX star-of-frame signal 
         uart_set_line_inverse(uart_num,UART_INVERSE_TXD);
         delay_microseconds(DMX_OUT_START_BREAK_US);
