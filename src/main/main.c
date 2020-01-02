@@ -20,6 +20,7 @@ void app_main(void)
 {
     setup_menu_mutexs();
     setup_scene_mutexs();
+    setup_display_mutexs();
 
     xTaskCreate(dmx_output_task, "dmx_output_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
     xTaskCreate(button_poll_task, "button_poll_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);

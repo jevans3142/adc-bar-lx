@@ -31,7 +31,7 @@
 #define NORMAL_SIZE 0
 #define DOUBLE_SIZE 1
 
-
+void setup_display_mutexs(void);
 void refresh_display(void);
 void enable_display(void);
 void reenable_display(void);
