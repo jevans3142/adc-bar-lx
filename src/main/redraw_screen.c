@@ -13,7 +13,9 @@
 SemaphoreHandle_t Screen_No_Mutex = NULL;
 int Screen_No = 0; 
 SemaphoreHandle_t Menu_Selected_Mutex = NULL;
-int Menu_Selected = 10; 
+int Menu_Selected = 10;
+SemaphoreHandle_t Screen_Selected_Value_Mutex = NULL;
+int Screen_Selected_Value = 0;  
 SemaphoreHandle_t Display_Active_Mutex = NULL;
 int Display_Active = 1; 
 unsigned long Display_Active_Timeout = 0;
@@ -35,11 +37,25 @@ static void draw_menu_symbols(void)
     draw_string(120,48,"~",NORMAL_SIZE, WHITE);
 }
 
+static void draw_standard_value_screen(const char* title, const char* line1, const char* line2)
+{
+    draw_menu_symbols();
+
+    draw_string(0,0,title,NORMAL_SIZE, WHITE);
+
+    draw_string(8,12,line1,NORMAL_SIZE, WHITE);
+    draw_string(8,20,line2,NORMAL_SIZE, WHITE);
+
+    c = get_screen_selected_value();
+    draw_string(16,32,&c,DOUBLE_SIZE, BLACK);
+}
+
 void setup_menu_mutexs(void)
 {
     Screen_No_Mutex = xSemaphoreCreateMutex();
     Menu_Selected_Mutex = xSemaphoreCreateMutex();
     Display_Active_Mutex = xSemaphoreCreateMutex();
+    Screen_Selected_Value_Mutex = xSemaphoreCreateMutex();
 
     reset_display_active_status();
 }
@@ -76,7 +92,7 @@ int get_display_active_status(void)
             return returnval;
         }
     }
-    return NULL;
+    return NULL; 
 }
 
 int reset_display_active_status(void)
@@ -98,6 +114,9 @@ int reset_display_active_status(void)
     }
     return returnval;
 }
+
+//========================
+//SCREEN SELECTED
 
 //TODO: better exception handling here 
 void set_screen(int new_screen_no, int new_menu_selected)
@@ -128,6 +147,9 @@ int get_screen(void)
     return NULL;
 }
 
+//========================
+//MENU SELECTED 
+
 void set_menu_selected(int new_menu_selected)
 {
     if( Menu_Selected_Mutex != NULL )
@@ -139,6 +161,46 @@ void set_menu_selected(int new_menu_selected)
         }
     }
 }
+
+void set_menu_selected_dec(int current_menu_last_item)
+{
+    if( Menu_Selected_Mutex != NULL )
+    {
+        if( xSemaphoreTake( Menu_Selected_Mutex, ( TickType_t ) 10 ) == pdTRUE )
+        {
+            if (Menu_Selected<1)
+            {
+                Menu_Selected = current_menu_last_item;
+            }
+            else
+            {
+                Menu_Selected--;
+            }
+            
+            xSemaphoreGive( Menu_Selected_Mutex );
+        }
+    }
+}
+
+void set_menu_selected_inc(int current_menu_last_item)
+{
+    if( Menu_Selected_Mutex != NULL )
+    {
+        if( xSemaphoreTake( Menu_Selected_Mutex, ( TickType_t ) 10 ) == pdTRUE )
+        {
+            if (Menu_Selected<current_menu_last_item)
+            {
+                Menu_Selected++;
+            }
+            else
+            {
+                Menu_Selected = 0;
+            }
+            xSemaphoreGive( Menu_Selected_Mutex );
+        }
+    }
+}
+
 
 int get_menu_selected(void)
 {
@@ -154,7 +216,76 @@ int get_menu_selected(void)
     return NULL;
 }
 
-//TODO: Should in fact this function be static? Call only through set_screen?
+//========================
+//SCREEN SELECTED VALUE 
+
+void set_screen_selected_value(int new_screen_selected_value)
+{
+    if( Screen_Selected_Value_Mutex != NULL )
+    {
+        if( xSemaphoreTake( Screen_Selected_Value_Mutex, ( TickType_t ) 10 ) == pdTRUE )
+        {
+            Screen_Selected_Value = new_screen_selected_value;
+            xSemaphoreGive( Screen_Selected_Value_Mutex );
+        }
+    }
+}
+
+void set_screen_selected_value_dec(int upper_bound, int lower_bound)
+{
+    if( Screen_Selected_Value_Mutex != NULL )
+    {
+        if( xSemaphoreTake( Screen_Selected_Value_Mutex, ( TickType_t ) 10 ) == pdTRUE )
+        {
+            if (Screen_Selected_Value<=lower_bound)
+            {
+                Screen_Selected_Value = upper_bound;
+            }
+            else
+            {
+                Screen_Selected_Value--;
+            }
+            xSemaphoreGive( Screen_Selected_Value_Mutex );
+        }
+    }
+}
+
+void set_screen_selected_value_inc(int upper_bound, int lower_bound)
+{
+    if( Screen_Selected_Value_Mutex != NULL )
+    {
+        if( xSemaphoreTake( Screen_Selected_Value_Mutex, ( TickType_t ) 10 ) == pdTRUE )
+        {
+            if (Screen_Selected_Value<upper_bound)
+            {
+                Screen_Selected_Value++;
+            }
+            else
+            {
+                Screen_Selected_Value = lower_bound;
+            }
+            xSemaphoreGive( Screen_Selected_Value_Mutex );
+        }
+    }
+}
+
+int get_screen_selected_value(void)
+{
+    if( Screen_Selected_Value_Mutex != NULL )
+    {
+        if( xSemaphoreTake( Screen_Selected_Value_Mutex, ( TickType_t ) 10 ) == pdTRUE )
+        {
+            int returnval = Screen_Selected_Value;
+            xSemaphoreGive( Screen_Selected_Value_Mutex );
+            return returnval;
+        }
+    }
+    return NULL;
+}
+
+//========================
+
+
 void redraw_screen(int screen_no)
 {
     clear_display();
@@ -164,9 +295,11 @@ void redraw_screen(int screen_no)
         case SCREEN_MAIN_STATUS :
             draw_line(0,28,128,28, WHITE);
             draw_line(64,28,64,64, WHITE);
-            draw_string(8,12,"1",NORMAL_SIZE, WHITE);
-            draw_rect(6,10,14,20, WHITE, LEAVE);
+            c = get_scene() + 48;
+            draw_string(8,12,&c,NORMAL_SIZE, WHITE);
+            draw_rect(6,10,14,20, WHITE, LEAVE);      
             draw_string(16,8,"Evening 1",DOUBLE_SIZE, WHITE);
+                 
             draw_string(70,30,"Audio in",NORMAL_SIZE, WHITE);
             draw_string(12,30,"DMX in",NORMAL_SIZE, WHITE);
             draw_string(12,40,"OFF",DOUBLE_SIZE, WHITE);
@@ -175,16 +308,27 @@ void redraw_screen(int screen_no)
         case SCREEN_MAIN_MENU :
             draw_menu_symbols();
 
-            draw_string(0,0,"Main Menu",NORMAL_SIZE, WHITE);
+            if (get_menu_selected()<5) 
+            {
+                draw_string(0,0,"Main Menu 1/2",NORMAL_SIZE, WHITE);
+                draw_string(8,16,"Recall Scene",NORMAL_SIZE, WHITE);
+                draw_string(8,24,"Record Scene",NORMAL_SIZE, WHITE);
+                draw_string(8,32,"Fade Time",NORMAL_SIZE, WHITE);
+                draw_string(8,40,"Sound To Light...",NORMAL_SIZE, WHITE);
+                draw_string(8,48,"DMX Input Mode",NORMAL_SIZE, WHITE);
+                draw_string(8,56,"~",NORMAL_SIZE, WHITE); //Down arrow
+                
+                draw_string(0,(16+8*get_menu_selected()),"^",NORMAL_SIZE, WHITE); //Menu cursor
+            }
+            else
+            {
+                draw_string(0,0,"Main Menu 2/2",NORMAL_SIZE, WHITE);
+                draw_string(8,16,"Lock Controls",NORMAL_SIZE, WHITE);
+                draw_string(8,8,"}",NORMAL_SIZE, WHITE); //Up arrow 
+  
+                draw_string(0,(16+8*(get_menu_selected()-5)),"^",NORMAL_SIZE, WHITE); //Menu cursor
+            }
 
-            draw_string(8,12,"Record Scene",NORMAL_SIZE, WHITE);
-            draw_string(8,20,"Fade Time",NORMAL_SIZE, WHITE);
-            draw_string(8,28,"DMX Input Mode",NORMAL_SIZE, WHITE);
-            draw_string(8,36,"Sound To Light...",NORMAL_SIZE, WHITE);
-            draw_string(8,44,"Lock Controls",NORMAL_SIZE, WHITE);
-
-            //Actually the menu position cursor
-            draw_string(0,(12+8*get_menu_selected()),"^",NORMAL_SIZE, WHITE);
             break;
 
         case SCREEN_S2L_MENU :
@@ -192,49 +336,95 @@ void redraw_screen(int screen_no)
 
             draw_string(0,0,"Sound To Light Menu",NORMAL_SIZE, WHITE);
 
-            draw_string(8,12,"Mode",NORMAL_SIZE, WHITE);
-            draw_string(8,20,"High Channel",NORMAL_SIZE, WHITE);
-            draw_string(8,28,"Mid-High Channel",NORMAL_SIZE, WHITE);
-            draw_string(8,36,"Mid-Low Channel",NORMAL_SIZE, WHITE);
-            draw_string(8,44,"Low Channel",NORMAL_SIZE, WHITE);
+            draw_string(8,16,"Mode",NORMAL_SIZE, WHITE);
+            draw_string(8,24,"High Channel",NORMAL_SIZE, WHITE);
+            draw_string(8,32,"Mid-High Channel",NORMAL_SIZE, WHITE);
+            draw_string(8,40,"Mid-Low Channel",NORMAL_SIZE, WHITE);
+            draw_string(8,48,"Low Channel",NORMAL_SIZE, WHITE);
 
             //Actually the menu position cursor
-            draw_string(0,(12+8*get_menu_selected()),"^",NORMAL_SIZE, WHITE);
+            draw_string(0,(16+8*get_menu_selected()),"^",NORMAL_SIZE, WHITE);
             break;
 
-        case SCREEN_RECORD_SCENE :
-            draw_menu_symbols();
 
-            draw_string(0,0,"Record Scene",NORMAL_SIZE, WHITE);
+        case SCREEN_RECALL_SCENE :
+            draw_standard_value_screen("Recall Scene", "Select scene to", "recall:"); 
+            break;
+        case SCREEN_RECORD_SCENE :
 
             if (get_menu_selected() == 0)
             {
-                draw_string(8,12,"Select scene to",NORMAL_SIZE, WHITE);
-                draw_string(8,20,"overwrite:",NORMAL_SIZE, WHITE);
-                
+                draw_standard_value_screen("Record Scene", "Select scene to", "overwrite:");           
             }
             else
             {
+                draw_string(0,0,"Record Scene",NORMAL_SIZE, WHITE);
+                draw_string(120,8,"{",NORMAL_SIZE, WHITE);
+                draw_string(120,20,"|",NORMAL_SIZE, WHITE);
 
+                draw_string(8,12,"Are you sure?",NORMAL_SIZE, WHITE);
+                draw_string(8,28,"This scene will",NORMAL_SIZE, WHITE);
+                draw_string(8,36,"be written when |",NORMAL_SIZE, WHITE);
+                draw_string(8,44,"is pressed.",NORMAL_SIZE, WHITE);
             }
 
             break;
         case SCREEN_FADE_TIME : 
+            draw_standard_value_screen("Fade time", "Select new", "fade time:");
             break;
-        case SCREEN_DMX_MODE : 
+        case SCREEN_DMX_MODE :
+            draw_menu_symbols();
+
+            draw_string(0,0,"DMX Mode",NORMAL_SIZE, WHITE);
+
+            draw_string(8,12,"Select new",NORMAL_SIZE, WHITE);
+            draw_string(8,20,"DMX input mode:",NORMAL_SIZE, WHITE);
+
+            c = get_screen_selected_value();
+            switch (c)
+            {
+                case 0 : //TODO: Make thse defined constants
+                    draw_string(16,32,"Off",DOUBLE_SIZE, BLACK); 
+                    break;
+                case 1 : 
+                    draw_string(16,32,"HTP",DOUBLE_SIZE, BLACK); 
+                    break;
+            }
             break;
         case SCREEN_LOCK_CTRLS : 
+            draw_standard_value_screen("Lock Controls", "Select a lock", "code:");
             break;
 
         case SCREEN_S2L_MODE : 
+            draw_menu_symbols();
+
+            draw_string(0,0,"S2L Mode",NORMAL_SIZE, WHITE);
+
+            draw_string(8,12,"Select new",NORMAL_SIZE, WHITE);
+            draw_string(8,20,"Sound-to-light mode:",NORMAL_SIZE, WHITE);
+
+            c = get_screen_selected_value();
+            switch (c)
+            {
+                case 0 : //TODO: Make thse defined constants
+                    draw_string(16,32,"Off",DOUBLE_SIZE, BLACK); 
+                    break;
+                case 1 : 
+                    draw_string(16,32,"Pulse",DOUBLE_SIZE, BLACK); 
+                    break;
+            }
             break;
         case SCREEN_S2L_H_CH :
+            draw_standard_value_screen("S2L High Ch", "Select new", "DMX channel:");
             break;
         case SCREEN_S2L_MH_CH : 
+            draw_standard_value_screen("S2L Mid-High Ch", "Select new", "DMX channel:");
             break;
         case SCREEN_S2L_ML_CH : 
+            draw_standard_value_screen("S2L Mid-Low Ch", "Select new", "DMX channel:");
             break;
         case SCREEN_S2L_L_CH : 
+            draw_standard_value_screen("S2L Low Ch", "Select new", "DMX channel:");
             break;
 
         
