@@ -1,0 +1,526 @@
+EESchema Schematic File Version 4
+LIBS:main-board-cache
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Relay:FINDER-40.52 K?
+U 1 1 5E3DC26E
+P 9450 1650
+F 0 "K?" V 10217 1650 50  0000 C CNN
+F 1 "DPDT Relay" V 10126 1650 50  0000 C CNN
+F 2 "Relay_THT:Relay_DPDT_Finder_40.52" H 10800 1620 50  0001 C CNN
+F 3 "http://gfinder.findernet.com/assets/Series/353/S40EN.pdf" H 9250 1650 50  0001 C CNN
+	1    9450 1650
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Relay:FINDER-40.52 K?
+U 1 1 5E3E280D
+P 9450 3250
+F 0 "K?" V 10217 3250 50  0000 C CNN
+F 1 "DPDT Relay" V 10126 3250 50  0000 C CNN
+F 2 "Relay_THT:Relay_DPDT_Finder_40.52" H 10800 3220 50  0001 C CNN
+F 3 "http://gfinder.findernet.com/assets/Series/353/S40EN.pdf" H 9250 3250 50  0001 C CNN
+	1    9450 3250
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	9150 1350 9000 1350
+Wire Wire Line
+	9000 2950 9150 2950
+Wire Wire Line
+	9150 3350 8900 3350
+Wire Wire Line
+	8900 1750 9150 1750
+$Comp
+L Connector:XLR5 J?
+U 1 1 5E3ED34B
+P 10750 1550
+F 0 "J?" H 10750 1915 50  0000 C CNN
+F 1 "XLR5" H 10750 1824 50  0000 C CNN
+F 2 "" H 10750 1550 50  0001 C CNN
+F 3 " ~" H 10750 1550 50  0001 C CNN
+	1    10750 1550
+	1    0    0    -1  
+$EndComp
+NoConn ~ 11050 1650
+NoConn ~ 11050 1550
+NoConn ~ 11050 3250
+Wire Wire Line
+	9950 1250 9750 1250
+$Comp
+L Interface_UART:MAX481E U?
+U 1 1 5E3F2BBA
+P 7850 1300
+F 0 "U?" H 7600 1750 50  0000 C CNN
+F 1 "MAX481E" H 8050 1750 50  0000 C CNN
+F 2 "" H 7850 600 50  0001 C CNN
+F 3 "https://datasheets.maximintegrated.com/en/ds/MAX1487E-MAX491E.pdf" H 7850 1350 50  0001 C CNN
+	1    7850 1300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9150 1150 8250 1150
+Wire Wire Line
+	8250 1150 8250 1200
+Wire Wire Line
+	9150 1550 8250 1550
+Wire Wire Line
+	8250 1550 8250 1500
+$Comp
+L Interface_UART:MAX481E U?
+U 1 1 5E3FDA96
+P 7850 2900
+F 0 "U?" H 7600 3350 50  0000 C CNN
+F 1 "MAX481E" H 8050 3350 50  0000 C CNN
+F 2 "" H 7850 2200 50  0001 C CNN
+F 3 "https://datasheets.maximintegrated.com/en/ds/MAX1487E-MAX491E.pdf" H 7850 2950 50  0001 C CNN
+	1    7850 2900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9150 2750 8250 2750
+Wire Wire Line
+	8250 2750 8250 2800
+Wire Wire Line
+	9150 3150 8250 3150
+Wire Wire Line
+	8250 3150 8250 3100
+Wire Wire Line
+	10750 1550 10750 1600
+Wire Wire Line
+	10750 1850 9950 1850
+Wire Wire Line
+	9950 1250 9950 1850
+$Comp
+L Connector:XLR5 J?
+U 1 1 5E402DA1
+P 10750 3150
+F 0 "J?" H 10750 3515 50  0000 C CNN
+F 1 "XLR5" H 10750 3424 50  0000 C CNN
+F 2 "" H 10750 3150 50  0001 C CNN
+F 3 " ~" H 10750 3150 50  0001 C CNN
+	1    10750 3150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10750 3150 10750 3200
+Wire Wire Line
+	10750 3450 9950 3450
+NoConn ~ 11050 3150
+Wire Wire Line
+	9950 3450 9950 2850
+Wire Wire Line
+	9950 2850 9750 2850
+NoConn ~ 7450 1500
+NoConn ~ 7450 2800
+$Comp
+L power:GNDD #PWR0101
+U 1 1 5E404A19
+P 7850 3500
+F 0 "#PWR0101" H 7850 3250 50  0001 C CNN
+F 1 "GNDD" H 7854 3345 50  0000 C CNN
+F 2 "" H 7850 3500 50  0001 C CNN
+F 3 "" H 7850 3500 50  0001 C CNN
+	1    7850 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GNDD #PWR0102
+U 1 1 5E405312
+P 7850 1900
+F 0 "#PWR0102" H 7850 1650 50  0001 C CNN
+F 1 "GNDD" H 7854 1745 50  0000 C CNN
+F 2 "" H 7850 1900 50  0001 C CNN
+F 3 "" H 7850 1900 50  0001 C CNN
+	1    7850 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5VD #PWR0103
+U 1 1 5E4060C7
+P 7850 800
+F 0 "#PWR0103" H 7850 650 50  0001 C CNN
+F 1 "+5VD" H 7865 973 50  0000 C CNN
+F 2 "" H 7850 800 50  0001 C CNN
+F 3 "" H 7850 800 50  0001 C CNN
+	1    7850 800 
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5VD #PWR0104
+U 1 1 5E406BB8
+P 7850 2400
+F 0 "#PWR0104" H 7850 2250 50  0001 C CNN
+F 1 "+5VD" H 7865 2573 50  0000 C CNN
+F 2 "" H 7850 2400 50  0001 C CNN
+F 3 "" H 7850 2400 50  0001 C CNN
+	1    7850 2400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9000 1350 9000 2950
+Wire Wire Line
+	8900 1750 8900 3350
+$Comp
+L power:GNDD #PWR0105
+U 1 1 5E40C3AB
+P 10250 3150
+F 0 "#PWR0105" H 10250 2900 50  0001 C CNN
+F 1 "GNDD" H 10254 2995 50  0000 C CNN
+F 2 "" H 10250 3150 50  0001 C CNN
+F 3 "" H 10250 3150 50  0001 C CNN
+	1    10250 3150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10450 3150 10250 3150
+$Comp
+L power:GNDD #PWR0106
+U 1 1 5E40D9EE
+P 10250 1550
+F 0 "#PWR0106" H 10250 1300 50  0001 C CNN
+F 1 "GNDD" H 10254 1395 50  0000 C CNN
+F 2 "" H 10250 1550 50  0001 C CNN
+F 3 "" H 10250 1550 50  0001 C CNN
+	1    10250 1550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10450 1550 10250 1550
+Wire Wire Line
+	10450 1650 10450 1800
+Wire Wire Line
+	10450 1800 9750 1800
+Wire Wire Line
+	9750 1800 9750 1650
+Wire Wire Line
+	10450 3250 10450 3400
+Wire Wire Line
+	10450 3400 9750 3400
+Wire Wire Line
+	9750 3400 9750 3250
+$Comp
+L power:+5V #PWR0107
+U 1 1 5E931A23
+P 3550 5050
+F 0 "#PWR0107" H 3550 4900 50  0001 C CNN
+F 1 "+5V" H 3565 5223 50  0000 C CNN
+F 2 "" H 3550 5050 50  0001 C CNN
+F 3 "" H 3550 5050 50  0001 C CNN
+	1    3550 5050
+	1    0    0    -1  
+$EndComp
+NoConn ~ 3450 5050
+$Comp
+L power:GND #PWR0108
+U 1 1 5E932E81
+P 3500 7200
+F 0 "#PWR0108" H 3500 6950 50  0001 C CNN
+F 1 "GND" H 3505 7027 50  0000 C CNN
+F 2 "" H 3500 7200 50  0001 C CNN
+F 3 "" H 3500 7200 50  0001 C CNN
+	1    3500 7200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3500 7200 3450 7200
+Wire Wire Line
+	3450 7200 3450 7150
+Wire Wire Line
+	3550 7150 3550 7200
+Wire Wire Line
+	3550 7200 3500 7200
+Connection ~ 3500 7200
+$Comp
+L Connector:Conn_01x04_Male J?
+U 1 1 5E934C0F
+P 1100 5100
+F 0 "J?" H 1208 5381 50  0000 C CNN
+F 1 "Display_Connector" H 1208 5290 50  0000 C CNN
+F 2 "" H 1100 5100 50  0001 C CNN
+F 3 "~" H 1100 5100 50  0001 C CNN
+	1    1100 5100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Conn_01x04_Male J?
+U 1 1 5E937FB0
+P 1100 5750
+F 0 "J?" H 1208 6031 50  0000 C CNN
+F 1 "S2L_Board_Connector" H 1208 5940 50  0000 C CNN
+F 2 "" H 1100 5750 50  0001 C CNN
+F 3 "~" H 1100 5750 50  0001 C CNN
+	1    1100 5750
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR0109
+U 1 1 5E939E24
+P 2150 5000
+F 0 "#PWR0109" H 2150 4850 50  0001 C CNN
+F 1 "+5V" H 2165 5173 50  0000 C CNN
+F 2 "" H 2150 5000 50  0001 C CNN
+F 3 "" H 2150 5000 50  0001 C CNN
+	1    2150 5000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2600 5450 1900 5450
+Wire Wire Line
+	1900 5300 1300 5300
+Wire Wire Line
+	1300 5200 2000 5200
+Wire Wire Line
+	2000 5350 2600 5350
+Wire Wire Line
+	1300 5100 2150 5100
+$Comp
+L power:GND #PWR0110
+U 1 1 5E93D532
+P 2150 5100
+F 0 "#PWR0110" H 2150 4850 50  0001 C CNN
+F 1 "GND" H 2155 4927 50  0000 C CNN
+F 2 "" H 2150 5100 50  0001 C CNN
+F 3 "" H 2150 5100 50  0001 C CNN
+	1    2150 5100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1300 5000 2150 5000
+Wire Wire Line
+	2000 5200 2000 5350
+Wire Wire Line
+	1900 5300 1900 5450
+Wire Wire Line
+	1300 5650 2600 5650
+Wire Wire Line
+	1300 5750 2600 5750
+Wire Wire Line
+	1300 5850 2600 5850
+Wire Wire Line
+	1300 5950 2600 5950
+$Comp
+L power:+5V #PWR0111
+U 1 1 5E949DBC
+P 1800 6600
+F 0 "#PWR0111" H 1800 6450 50  0001 C CNN
+F 1 "+5V" H 1815 6773 50  0000 C CNN
+F 2 "" H 1800 6600 50  0001 C CNN
+F 3 "" H 1800 6600 50  0001 C CNN
+	1    1800 6600
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0112
+U 1 1 5E94D953
+P 1800 6700
+F 0 "#PWR0112" H 1800 6450 50  0001 C CNN
+F 1 "GND" H 1805 6527 50  0000 C CNN
+F 2 "" H 1800 6700 50  0001 C CNN
+F 3 "" H 1800 6700 50  0001 C CNN
+	1    1800 6700
+	1    0    0    -1  
+$EndComp
+NoConn ~ 1300 6400
+$Comp
+L Connector:Conn_01x04_Male J?
+U 1 1 5E939902
+P 1100 6500
+F 0 "J?" H 1208 6781 50  0000 C CNN
+F 1 "PSU_Connector" H 1208 6690 50  0000 C CNN
+F 2 "" H 1100 6500 50  0001 C CNN
+F 3 "~" H 1100 6500 50  0001 C CNN
+	1    1100 6500
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+12V #PWR0113
+U 1 1 5E954D46
+P 1650 6500
+F 0 "#PWR0113" H 1650 6350 50  0001 C CNN
+F 1 "+12V" H 1665 6673 50  0000 C CNN
+F 2 "" H 1650 6500 50  0001 C CNN
+F 3 "" H 1650 6500 50  0001 C CNN
+	1    1650 6500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1300 6500 1650 6500
+Wire Wire Line
+	1300 6600 1800 6600
+Wire Wire Line
+	1300 6700 1800 6700
+Text Label 2250 5350 0    50   ~ 0
+I2C_SCL
+Text Label 2250 5450 0    50   ~ 0
+I2C_SDA
+Text Label 2200 5650 0    50   ~ 0
+ADC_CH_1
+Text Label 2200 5750 0    50   ~ 0
+ADC_CH_2
+Text Label 2200 5850 0    50   ~ 0
+ADC_CH_3
+Text Label 2200 5950 0    50   ~ 0
+ADC_CH_4
+Wire Wire Line
+	4400 5350 4950 5350
+Wire Wire Line
+	4950 5450 4400 5450
+Wire Wire Line
+	4400 5550 4950 5550
+Wire Wire Line
+	4400 5650 4950 5650
+Wire Wire Line
+	4400 5750 4950 5750
+Wire Wire Line
+	4950 5850 4400 5850
+$Comp
+L power:GND #PWR0114
+U 1 1 5E972FC0
+P 4650 5050
+F 0 "#PWR0114" H 4650 4800 50  0001 C CNN
+F 1 "GND" H 4655 4877 50  0000 C CNN
+F 2 "" H 4650 5050 50  0001 C CNN
+F 3 "" H 4650 5050 50  0001 C CNN
+	1    4650 5050
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+12V #PWR0115
+U 1 1 5E9738F5
+P 4650 6100
+F 0 "#PWR0115" H 4650 5950 50  0001 C CNN
+F 1 "+12V" H 4665 6273 50  0000 C CNN
+F 2 "" H 4650 6100 50  0001 C CNN
+F 3 "" H 4650 6100 50  0001 C CNN
+	1    4650 6100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4650 5050 4850 5050
+Wire Wire Line
+	4850 5050 4850 5250
+Wire Wire Line
+	4850 5250 4950 5250
+Wire Wire Line
+	4950 5950 4850 5950
+Wire Wire Line
+	4850 5950 4850 6100
+Wire Wire Line
+	4850 6100 4650 6100
+$Comp
+L Connector:8P8C J?
+U 1 1 5E97BB72
+P 5350 5550
+F 0 "J?" H 5020 5554 50  0000 R CNN
+F 1 "Remote_Panel _Connector" H 5020 5645 50  0000 R CNN
+F 2 "" V 5350 5575 50  0001 C CNN
+F 3 "~" V 5350 5575 50  0001 C CNN
+	1    5350 5550
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Conn_01x05_Female J?
+U 1 1 5E982860
+P 5300 6500
+F 0 "J?" H 5328 6526 50  0000 L CNN
+F 1 "Buttons_Connector" H 5328 6435 50  0000 L CNN
+F 2 "" H 5300 6500 50  0001 C CNN
+F 3 "~" H 5300 6500 50  0001 C CNN
+	1    5300 6500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4400 6300 5100 6300
+Wire Wire Line
+	4400 6400 5100 6400
+Wire Wire Line
+	5100 6500 4400 6500
+Wire Wire Line
+	4400 6600 5100 6600
+$Comp
+L power:GND #PWR0116
+U 1 1 5E98BB00
+P 5000 6700
+F 0 "#PWR0116" H 5000 6450 50  0001 C CNN
+F 1 "GND" H 5005 6527 50  0000 C CNN
+F 2 "" H 5000 6700 50  0001 C CNN
+F 3 "" H 5000 6700 50  0001 C CNN
+	1    5000 6700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5000 6700 5100 6700
+Wire Wire Line
+	4400 6800 4750 6800
+Wire Wire Line
+	4400 6900 4750 6900
+Text Label 4450 6800 0    50   ~ 0
+DMX_RX
+Text Label 4450 6900 0    50   ~ 0
+DMX_TX
+$Comp
+L MCU_Espressif:ESP32 U?
+U 1 1 5E92C2AC
+P 3500 6050
+F 0 "U?" H 2750 7000 50  0000 C CNN
+F 1 "ESP32" H 4150 7000 50  0000 C CNN
+F 2 "Module:ESP32_DOIT30" H 3500 4750 50  0001 C CNN
+F 3 "http://espressif.com/sites/default/files/documentation/0a-esp8266ex_datasheet_en.pdf" H 3550 4750 50  0001 C CNN
+	1    3500 6050
+	1    0    0    -1  
+$EndComp
+NoConn ~ 2600 6300
+NoConn ~ 2600 6400
+NoConn ~ 2600 6500
+NoConn ~ 2600 6600
+NoConn ~ 2600 6700
+NoConn ~ 2600 6800
+NoConn ~ 2600 6900
+$Comp
+L Regulator_Switching:TMA_0505S U?
+U 1 1 5E9BA76B
+P 4000 1650
+F 0 "U?" H 4000 2117 50  0000 C CNN
+F 1 "TMA_0505S" H 4000 2026 50  0000 C CNN
+F 2 "Converter_DCDC:Traco_TMA_DCDCsingle" H 4000 1300 50  0001 C CNN
+F 3 "http://assets.tracopower.com/TMR1/documents/tmr1-datasheet.pdf" H 4000 1150 50  0001 C CNN
+	1    4000 1650
+	1    0    0    -1  
+$EndComp
+$Comp
+L Regulator_Switching:TMA_0505S U?
+U 1 1 5E9BC0CB
+P 4000 2600
+F 0 "U?" H 4000 3067 50  0000 C CNN
+F 1 "TMA_0505S" H 4000 2976 50  0000 C CNN
+F 2 "Converter_DCDC:Traco_TMA_DCDCsingle" H 4000 2250 50  0001 C CNN
+F 3 "http://assets.tracopower.com/TMR1/documents/tmr1-datasheet.pdf" H 4000 2100 50  0001 C CNN
+	1    4000 2600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:6N136 U?
+U 1 1 5E9BE7CA
+P 6050 2050
+F 0 "U?" H 6050 2475 50  0000 C CNN
+F 1 "6N136" H 6050 2384 50  0000 C CNN
+F 2 "Package_DIP:DIP-8_W7.62mm" H 5850 1750 50  0001 L CIN
+F 3 "https://optoelectronics.liteon.com/upload/download/DS70-2008-0032/6N135-L%206N136-L%20series.pdf" H 6050 2050 50  0001 L CNN
+	1    6050 2050
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC
