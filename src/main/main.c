@@ -18,6 +18,7 @@
 
 void app_main(void)
 {
+    vTaskDelay(100);
     setup_menu_mutexs();
     setup_scene_mutexs();
     setup_display_mutexs();
