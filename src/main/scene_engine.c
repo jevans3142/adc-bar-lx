@@ -9,12 +9,13 @@
 #include "scene_engine.h"
 
 SemaphoreHandle_t Scene_No_Mutex = NULL;
+SemaphoreHandle_t Scene_Engine_Settings_Mutex = NULL;
 int Scene_No = 1; //NB: This variable is 1 indexed
 int Scene_State = SCENE_STATE_STATIC;
-uint8_t last_fade_state[512] = {};
-uint8_t current_state[512] = {};
-uint8_t scenes[7][512] = {};
-int fade_time = 5;
+uint8_t last_fade_state[513] = {};
+uint8_t current_state[513] = {};
+uint8_t scenes[NUMBER_OF_SCENES][513] = {};
+int fade_time = 5; //TODO: not this as default
 float fade_proportion = 0;
 unsigned long current_fade_timeout = 0;
 
@@ -23,9 +24,9 @@ static unsigned long IRAM_ATTR millis()
     return (unsigned long) (esp_timer_get_time() / 1000ULL);
 }
 
-static void htp_512(uint8_t* first, uint8_t* second)
+static void htp_513(uint8_t* first, uint8_t* second)
 {
-    for(int i=0; i<512;i++)
+    for(int i=0; i<513;i++)
     {
         if (*first<*second) 
         { 
@@ -37,9 +38,9 @@ static void htp_512(uint8_t* first, uint8_t* second)
     }
 }
 
-static void copy_512(uint8_t* source, uint8_t* dest)
+static void copy_513(uint8_t* source, uint8_t* dest)
 {
-    for(int i=0; i<512;i++)
+    for(int i=0; i<513;i++)
     {
         *dest=*source;
         source++;
@@ -47,9 +48,9 @@ static void copy_512(uint8_t* source, uint8_t* dest)
     }
 }
 
-static void proportion_512(uint8_t* first, uint8_t* second, uint8_t* output, float progress)
+static void proportion_513(uint8_t* first, uint8_t* second, uint8_t* output, float progress)
 {
-    for(int i=0; i<512;i++)
+    for(int i=0; i<513;i++)
     {
         *output = (uint8_t)((*first)*(progress)+(*second)*(1-progress));
         first++;
@@ -77,24 +78,28 @@ void setup_scene_mutexs(void)
     //TODO: Setup fade time
     
     //TEST CODE==============
-    for (int j=0;j<7;j++)
+    for (int j=0;j<NUMBER_OF_SCENES;j++)
     {
-        for (int i=0;i<512;i++)
+        for (int i=0;i<513;i++)
         {
             scenes[j][i]=0x00;
         }
     }
-    scenes[0][0]=0xFF;
-    scenes[0][1]=0x55;
-    scenes[1][0]=0x22;
-    scenes[1][1]=0x44;
+    scenes[0][1]=0xFF;
+    scenes[0][2]=0xFF;
+
+    scenes[1][1]=0xFF;
+    scenes[1][3]=0xFF;
+
+    scenes[2][1]=0xFF;
+    scenes[2][4]=0xFF;
     //=======================  
 }
 
 void set_scene(int new_scene_no)
 {
     //Sanity bounds check
-    if (new_scene_no>7 || new_scene_no<1)
+    if (new_scene_no>NUMBER_OF_SCENES || new_scene_no<1)
     {
         new_scene_no = 1;
     }
@@ -107,7 +112,7 @@ void set_scene(int new_scene_no)
                 Scene_No = new_scene_no;
                 xSemaphoreGive( Scene_No_Mutex );
                 current_fade_timeout = millis() + ((unsigned long) fade_time)*1000ULL;
-                copy_512(current_state, last_fade_state);
+                copy_513(current_state, last_fade_state);
                 Scene_State = SCENE_STATE_FADING;
                 gpio_set_level(PIN_SCENE_LEDS_BIT_1, (new_scene_no & 1));
                 gpio_set_level(PIN_SCENE_LEDS_BIT_2, (new_scene_no & 2));
@@ -138,7 +143,8 @@ int get_scene(void)
 void transfer_scene_data(uint8_t* output)
 {
     scene_calc_task();
-    copy_512(current_state,output);
+    current_state[0]=0x00; // Make sure that we're outputting a dimmer frame just in case
+    copy_513(current_state,output);
             
     return NULL;
 }
@@ -157,13 +163,13 @@ void scene_calc_task(void)
         {
             //Then we're still in the middle of the fade
             fade_proportion = ((float)(current_fade_timeout-millis()))/((float)(1000*fade_time));
-            proportion_512(last_fade_state, scenes[get_scene()-1], current_state, fade_proportion);
+            proportion_513(last_fade_state, scenes[get_scene()-1], current_state, fade_proportion);
         }
     }
     if (Scene_State == SCENE_STATE_STATIC)
     {
         //Static
-        copy_512(scenes[get_scene()-1],current_state);
+        copy_513(scenes[get_scene()-1],current_state);
     }
 
     if (true) //If DMX Input active
