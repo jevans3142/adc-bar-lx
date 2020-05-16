@@ -124,12 +124,15 @@ static void up_button_do(void)
             break;
         case SCREEN_RECALL_SCENE :
             set_screen_selected_value_inc(7,1);
+            redraw_screen(get_screen());
             break;
         case SCREEN_RECORD_SCENE :
             set_screen_selected_value_inc(7,1);
+            redraw_screen(get_screen());
             break;
         case SCREEN_FADE_TIME : 
             set_screen_selected_value_inc(59,1);
+            redraw_screen(get_screen());
             break;
         case SCREEN_S2L_MENU : 
             set_menu_selected_dec(4);
@@ -137,19 +140,23 @@ static void up_button_do(void)
             break;
         case SCREEN_DMX_MODE : 
             set_screen_selected_value_inc(1,0);
+            redraw_screen(get_screen());
             break;
         case SCREEN_LOCK_CTRLS : 
             set_screen_selected_value_inc(999,0);
+            redraw_screen(get_screen());
             break;
 
         case SCREEN_S2L_MODE : 
             set_screen_selected_value_inc(1,0);
+            redraw_screen(get_screen());
             break;
         case SCREEN_S2L_H_CH :
         case SCREEN_S2L_MH_CH : 
         case SCREEN_S2L_ML_CH : 
         case SCREEN_S2L_L_CH :  
             set_screen_selected_value_inc(512,1);
+            redraw_screen(get_screen());
             break;
     }
 }
@@ -171,12 +178,15 @@ static void down_button_do(void)
             break;
         case SCREEN_RECALL_SCENE :
             set_screen_selected_value_dec(7,1);
+            redraw_screen(get_screen());
             break;
         case SCREEN_RECORD_SCENE :
             set_screen_selected_value_dec(7,1);
+            redraw_screen(get_screen());
             break;
         case SCREEN_FADE_TIME : 
             set_screen_selected_value_dec(59,1);
+            redraw_screen(get_screen());
             break;
         case SCREEN_S2L_MENU :
             set_menu_selected_inc(4);
@@ -184,19 +194,23 @@ static void down_button_do(void)
             break;
         case SCREEN_DMX_MODE : 
             set_screen_selected_value_dec(1,0);
+            redraw_screen(get_screen());
             break;
         case SCREEN_LOCK_CTRLS : 
             set_screen_selected_value_dec(999,0);
+            redraw_screen(get_screen());
             break;
 
         case SCREEN_S2L_MODE : 
             set_screen_selected_value_dec(1,0);
+            redraw_screen(get_screen());
             break;
         case SCREEN_S2L_H_CH :
         case SCREEN_S2L_MH_CH : 
         case SCREEN_S2L_ML_CH : 
         case SCREEN_S2L_L_CH :  
             set_screen_selected_value_dec(512,1);
+            redraw_screen(get_screen());
             break;
     }
 }
@@ -266,36 +280,36 @@ void button_poll_task(void)
         // Scene buttons
         int current_button_selected = scene_button_decode();
         if (current_button_selected == 0)
+        {
+            if (scene_state != 0)
             {
-                if (scene_state != 0)
-                    {
-                        scene_state = 0;
-                        set_scene(scene_number);
-                        if (get_screen()==0)
-                        {
-                            redraw_screen(0);
-                        }
-                    }       
-                scene_counter = 0;
-                scene_number = 0;
+                scene_state = 0;
+                set_scene(scene_number);
+                if (get_screen()==0)
+                {
+                    redraw_screen(0);
+                }
             }
+            scene_counter = 0;
+            scene_number = 0;             
+        }
         else
+        {
+            if (current_button_selected==scene_number)
             {
-                if (current_button_selected==scene_number)
-                {
-                    scene_counter++;
-                }
-                else
-                {
-                    scene_counter = 0;
-                    scene_number = current_button_selected;
-                }
+                scene_counter++;
+            }
+            else
+            {
+                scene_counter = 0;
+                scene_number = current_button_selected;
+            }
 
-            }
+        }
         if (scene_counter >= BUTTON_DEBOUNCE_TICKS)
-            {
-                scene_state = 1;   
-            }
+        {
+            scene_state = 1;   
+        }
 
     
         
