@@ -4,7 +4,7 @@
 #include "driver/uart.h"
 
 #include "dmx_io.h"
-
+#include "scene_engine.h"
 
 //Functions to provide microsecond delays 
 
@@ -54,17 +54,6 @@ void dmx_output_task(void)
 
     // Allocate buffers for UART
     uint8_t* data = (uint8_t*) malloc(DMX_OUT_BUFFER_SIZE);
-    
-    //TEST CODE==============
-    for (int i=0;i<512;i++)
-    {
-        data[i]=0x00;
-    }
-    data[1]=0xFF;
-    data[2]=0x55;
-    data[511]=0x22;
-    data[512]=0x44;
-    //=======================
 
     uart_driver_install(uart_num, DMX_OUT_BUFFER_SIZE * 2, DMX_OUT_BUFFER_SIZE * 2, 0, NULL, 0);
     uart_set_mode(uart_num, UART_MODE_RS485_HALF_DUPLEX);
@@ -72,6 +61,8 @@ void dmx_output_task(void)
 
     while(1) 
     {
+        transfer_scene_data(data);
+
         //Send DMX star-of-frame signal 
         uart_set_line_inverse(uart_num,UART_INVERSE_TXD);
         delay_microseconds(DMX_OUT_START_BREAK_US);
