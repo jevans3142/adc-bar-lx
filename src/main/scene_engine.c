@@ -35,15 +35,29 @@ void setup_scene_mutexs(void)
 
 void set_scene(int new_scene_no)
 {
+    //Sanity bounds check
+    if (new_scene_no>7 || new_scene_no<1)
+    {
+        new_scene_no = 1;
+    }
     if( Scene_No_Mutex != NULL )
     {
         if( xSemaphoreTake( Scene_No_Mutex, ( TickType_t ) 10 ) == pdTRUE )
         {
-            Scene_No = new_scene_no;
-            xSemaphoreGive( Scene_No_Mutex );
-            gpio_set_level(PIN_SCENE_LEDS_BIT_1, (new_scene_no & 1));
-            gpio_set_level(PIN_SCENE_LEDS_BIT_2, (new_scene_no & 2));
-            gpio_set_level(PIN_SCENE_LEDS_BIT_4, (new_scene_no & 4));
+            if (Scene_No != new_scene_no)
+            {
+                Scene_No = new_scene_no;
+                xSemaphoreGive( Scene_No_Mutex );
+                current_fade_timeout = millis() + fade_time*1000;
+                copy_512(current_state, last_fade_state);
+                gpio_set_level(PIN_SCENE_LEDS_BIT_1, (new_scene_no & 1));
+                gpio_set_level(PIN_SCENE_LEDS_BIT_2, (new_scene_no & 2));
+                gpio_set_level(PIN_SCENE_LEDS_BIT_4, (new_scene_no & 4));
+            }
+            else
+            {
+                xSemaphoreGive( Scene_No_Mutex );
+            }
         }
     }
 }
