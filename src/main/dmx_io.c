@@ -61,7 +61,7 @@ void dmx_output_task(void)
 
     while(1) 
     {
-        transfer_scene_data(data);
+        scene_calc_task(data);
 
         //Send DMX star-of-frame signal 
         uart_set_line_inverse(uart_num,UART_INVERSE_TXD);
