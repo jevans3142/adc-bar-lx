@@ -20,8 +20,7 @@ SemaphoreHandle_t Display_Active_Mutex = NULL;
 int Display_Active = 1; 
 unsigned long Display_Active_Timeout = 0;
 
-char c; 
-
+char c[20]; 
 
 static unsigned long IRAM_ATTR millis()
 {
@@ -46,7 +45,7 @@ static void draw_standard_value_screen(const char* title, const char* line1, con
     draw_string(8,12,line1,NORMAL_SIZE, WHITE);
     draw_string(8,20,line2,NORMAL_SIZE, WHITE);
 
-    c = get_screen_selected_value();
+    sprintf(c,"%u",get_screen_selected_value());
     draw_string(16,32,&c,DOUBLE_SIZE, BLACK);
 }
 
@@ -295,11 +294,34 @@ void redraw_screen(int screen_no)
         case SCREEN_MAIN_STATUS :
             draw_line(0,28,128,28, WHITE);
             draw_line(64,28,64,64, WHITE);
-            c = get_scene() + 48;
+            sprintf(c,"%u",get_scene());
             draw_string(8,12,&c,NORMAL_SIZE, WHITE);
-            draw_rect(6,10,14,20, WHITE, LEAVE);      
-            draw_string(16,8,"Evening 1",DOUBLE_SIZE, WHITE);
-                 
+            draw_rect(6,10,14,20, WHITE, LEAVE);
+            switch (get_scene())
+            {
+                case 1 :
+                    draw_string(16,8,"Daytime",DOUBLE_SIZE, WHITE);
+                    break;
+                case 2 :
+                    draw_string(16,8,"Evening 1",DOUBLE_SIZE, WHITE);
+                    break;
+                case 3 :
+                    draw_string(16,8,"Evening 2",DOUBLE_SIZE, WHITE);
+                    break;
+                case 4 : 
+                    draw_string(16,8,"Party",DOUBLE_SIZE, WHITE);
+                    break;
+                case 5 :
+                    draw_string(16,8,"Show",DOUBLE_SIZE, WHITE);
+                    break;
+                case 6 :
+                    draw_string(16,8,"Special",DOUBLE_SIZE, WHITE);
+                    break;
+                case 7 :
+                    draw_string(16,8,"Off",DOUBLE_SIZE, WHITE);
+                    break;
+            }
+            
             draw_string(70,30,"Audio in",NORMAL_SIZE, WHITE);
             draw_string(12,30,"DMX in",NORMAL_SIZE, WHITE);
             draw_string(12,40,"OFF",DOUBLE_SIZE, WHITE);
@@ -380,8 +402,7 @@ void redraw_screen(int screen_no)
             draw_string(8,12,"Select new",NORMAL_SIZE, WHITE);
             draw_string(8,20,"DMX input mode:",NORMAL_SIZE, WHITE);
 
-            c = get_screen_selected_value();
-            switch (c)
+            switch (get_screen_selected_value())
             {
                 case 0 : //TODO: Make thse defined constants
                     draw_string(16,32,"Off",DOUBLE_SIZE, BLACK); 
@@ -403,8 +424,7 @@ void redraw_screen(int screen_no)
             draw_string(8,12,"Select new",NORMAL_SIZE, WHITE);
             draw_string(8,20,"Sound-to-light mode:",NORMAL_SIZE, WHITE);
 
-            c = get_screen_selected_value();
-            switch (c)
+            switch (get_screen_selected_value())
             {
                 case 0 : //TODO: Make thse defined constants
                     draw_string(16,32,"Off",DOUBLE_SIZE, BLACK); 
