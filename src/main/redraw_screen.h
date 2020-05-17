@@ -24,22 +24,32 @@
 #define SCREEN_S2L_ML_CH 23
 #define SCREEN_S2L_L_CH 24
 
+#define SCREEN_UNLOCK_CTRLS 99
+
 //-------
 
 void setup_menu_mutexs(void);
+
 void display_timeout_task(void);
 int get_display_active_status(void);
 int reset_display_active_status(void);
+
 void set_screen(int screen_no, int new_menu_selected);
 int get_screen(void);
+
 void set_menu_selected(int new_menu_selected);
 int get_menu_selected(void);
 void set_menu_selected_dec(int current_menu_last_item);
 void set_menu_selected_inc(int current_menu_last_item);
+
 void set_screen_selected_value(int new_screen_selected_value);
 void set_screen_selected_value_dec(int upper_bound, int lower_bound);
 void set_screen_selected_value_inc(int upper_bound, int lower_bound);
 int get_screen_selected_value(void);
+
+void set_lock_code(int new_lock_code);
+int get_lock_code(void);
+
 void redraw_screen(int screen_no);
 
 #endif  

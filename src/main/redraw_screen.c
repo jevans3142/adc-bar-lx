@@ -18,6 +18,8 @@ SemaphoreHandle_t Screen_Selected_Value_Mutex = NULL;
 int Screen_Selected_Value = 0;  
 SemaphoreHandle_t Display_Active_Mutex = NULL;
 int Display_Active = 1; 
+SemaphoreHandle_t Menu_Locked_Mutex = NULL;
+int Menu_Locked_Code = 0; 
 unsigned long Display_Active_Timeout = 0;
 
 char c[20]; 
@@ -55,6 +57,7 @@ void setup_menu_mutexs(void)
     Menu_Selected_Mutex = xSemaphoreCreateMutex();
     Display_Active_Mutex = xSemaphoreCreateMutex();
     Screen_Selected_Value_Mutex = xSemaphoreCreateMutex();
+    Menu_Locked_Mutex = xSemaphoreCreateMutex();
 
     reset_display_active_status();
 }
@@ -283,7 +286,35 @@ int get_screen_selected_value(void)
 }
 
 //========================
+// Screen lock code
 
+void set_lock_code(int new_lock_code)
+{
+    if( Menu_Locked_Mutex != NULL )
+    {
+        if( xSemaphoreTake( Menu_Locked_Mutex, ( TickType_t ) 10 ) == pdTRUE )
+        {
+            Menu_Locked_Code = new_lock_code;
+            xSemaphoreGive( Menu_Locked_Mutex );
+        }
+    }
+}
+
+int get_lock_code(void)
+{
+    if( Menu_Locked_Mutex != NULL )
+    {
+        if( xSemaphoreTake( Menu_Locked_Mutex, ( TickType_t ) 10 ) == pdTRUE )
+        {
+            int returnval = Menu_Locked_Code;
+            xSemaphoreGive( Menu_Locked_Mutex );
+            return returnval;
+        }
+    }
+    return NULL;
+}
+
+//========================
 
 void redraw_screen(int screen_no)
 {
@@ -325,6 +356,14 @@ void redraw_screen(int screen_no)
             draw_string(70,30,"Audio in",NORMAL_SIZE, WHITE);
             draw_string(12,30,"DMX in",NORMAL_SIZE, WHITE);
             draw_string(12,40,"OFF",DOUBLE_SIZE, WHITE);
+            if (get_lock_code()!=0)
+            {
+                draw_string(120,8,"$",NORMAL_SIZE, WHITE); // Actually the padlock icon
+            }
+            else 
+            {
+                draw_string(120,8,"{",NORMAL_SIZE, WHITE); // Actually the menu icon
+            }
             break;  
 
         case SCREEN_MAIN_MENU :
@@ -447,6 +486,9 @@ void redraw_screen(int screen_no)
             draw_standard_value_screen("S2L Low Ch", "Select new", "DMX channel:");
             break;
 
+        case SCREEN_UNLOCK_CTRLS : 
+            draw_standard_value_screen("Unlock Controls", "Enter the lock", "code:");
+            break;
         
     }
     refresh_display();

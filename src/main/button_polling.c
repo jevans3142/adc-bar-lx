@@ -7,7 +7,14 @@
 
 #include "button_polling.h"
 #include "redraw_screen.h"
+#include "screen_driver.h"
 #include "scene_engine.h"
+
+static void special_msg_pop_task(void) {
+    vTaskDelay(SCREEN_MSG_POP_DURATION_MS);
+    redraw_screen(get_screen());
+    vTaskDelete(NULL);
+}
 
 static void menu_button_do(void)
 {   
@@ -19,9 +26,18 @@ static void menu_button_do(void)
     switch (get_screen())
     {
         case SCREEN_MAIN_STATUS :
-            set_screen(SCREEN_MAIN_MENU,0);
+            if (get_lock_code()==0)
+            {
+                set_screen(SCREEN_MAIN_MENU,0);
+            }
+            else
+            {
+                set_screen_selected_value(1);
+                set_screen(SCREEN_UNLOCK_CTRLS,0);
+            }
             break;
         case SCREEN_MAIN_MENU :
+        case SCREEN_UNLOCK_CTRLS :
             set_screen(SCREEN_MAIN_STATUS,0);
             break;
 
@@ -80,7 +96,7 @@ static void set_button_do(void)
             set_screen(SCREEN_MAIN_MENU, SCREEN_DMX_MODE - 10);
             break;
         case SCREEN_LOCK_CTRLS : 
-            //TODO
+            set_lock_code(get_screen_selected_value());
             set_screen(SCREEN_MAIN_STATUS, 0);
             break;
 
@@ -103,6 +119,20 @@ static void set_button_do(void)
         case SCREEN_S2L_L_CH : 
             //TODO 
             set_screen(SCREEN_S2L_MENU, SCREEN_S2L_L_CH - 20);
+            break;
+        
+        case SCREEN_UNLOCK_CTRLS :
+            if (get_screen_selected_value()==get_lock_code())
+            {
+                set_lock_code(0);
+                set_screen(SCREEN_MAIN_MENU,0);
+            } 
+            else
+            {
+                draw_string(70,32,"X",DOUBLE_SIZE, WHITE);
+                refresh_display();
+                xTaskCreate(special_msg_pop_task, "special_msg_pop_task", 2048, NULL, 5, NULL);
+            }
             break;
     }
 }
@@ -143,10 +173,10 @@ static void up_button_do(void)
             redraw_screen(get_screen());
             break;
         case SCREEN_LOCK_CTRLS : 
-            set_screen_selected_value_inc(999,0);
+        case SCREEN_UNLOCK_CTRLS :
+            set_screen_selected_value_inc(999,1);
             redraw_screen(get_screen());
             break;
-
         case SCREEN_S2L_MODE : 
             set_screen_selected_value_inc(1,0);
             redraw_screen(get_screen());
@@ -197,7 +227,8 @@ static void down_button_do(void)
             redraw_screen(get_screen());
             break;
         case SCREEN_LOCK_CTRLS : 
-            set_screen_selected_value_dec(999,0);
+        case SCREEN_UNLOCK_CTRLS :
+            set_screen_selected_value_dec(999,1);
             redraw_screen(get_screen());
             break;
 
