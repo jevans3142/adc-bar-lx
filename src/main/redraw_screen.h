@@ -37,10 +37,10 @@ int reset_display_active_status(void);
 void set_screen(int screen_no, int new_menu_selected);
 int get_screen(void);
 
-void set_menu_selected(int new_menu_selected);
-int get_menu_selected(void);
-void set_menu_selected_dec(int current_menu_last_item);
-void set_menu_selected_inc(int current_menu_last_item);
+// void set_menu_selected(int new_menu_selected);
+// int get_menu_selected(void);
+// void set_menu_selected_dec(int current_menu_last_item);
+// void set_menu_selected_inc(int current_menu_last_item);
 
 void set_screen_selected_value(int new_screen_selected_value);
 void set_screen_selected_value_dec(int upper_bound, int lower_bound);

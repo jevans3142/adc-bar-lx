@@ -73,7 +73,7 @@ static void set_button_do(void)
         case SCREEN_MAIN_STATUS : //No action
             break;
         case SCREEN_MAIN_MENU :
-            set_screen(get_menu_selected()+10,0);
+            set_screen(get_screen_selected_value()+10,0);
             break;
 
         case SCREEN_RECALL_SCENE :
@@ -89,7 +89,7 @@ static void set_button_do(void)
             set_screen(SCREEN_MAIN_MENU, SCREEN_FADE_TIME - 10);
             break;
         case SCREEN_S2L_MENU :
-            set_screen(get_menu_selected()+20,0);
+            set_screen(get_screen_selected_value()+20,0);
             break;
         case SCREEN_DMX_MODE : 
             //TODO
@@ -149,7 +149,7 @@ static void up_button_do(void)
         case SCREEN_MAIN_STATUS : // No action
             break;
         case SCREEN_MAIN_MENU : 
-            set_menu_selected_dec(5);
+            set_screen_selected_value_dec(5,0);
             redraw_screen(get_screen());
             break;
         case SCREEN_RECALL_SCENE :
@@ -165,7 +165,7 @@ static void up_button_do(void)
             redraw_screen(get_screen());
             break;
         case SCREEN_S2L_MENU : 
-            set_menu_selected_dec(4);
+            set_screen_selected_value_dec(4,0);
             redraw_screen(get_screen());
             break;
         case SCREEN_DMX_MODE : 
@@ -203,7 +203,7 @@ static void down_button_do(void)
         case SCREEN_MAIN_STATUS : //No action
             break;
         case SCREEN_MAIN_MENU :
-            set_menu_selected_inc(5);
+            set_screen_selected_value_inc(5,0);
             redraw_screen(get_screen());
             break;
         case SCREEN_RECALL_SCENE :
@@ -219,7 +219,7 @@ static void down_button_do(void)
             redraw_screen(get_screen());
             break;
         case SCREEN_S2L_MENU :
-            set_menu_selected_inc(4);
+            set_screen_selected_value_inc(4,0);
             redraw_screen(get_screen());
             break;
         case SCREEN_DMX_MODE : 

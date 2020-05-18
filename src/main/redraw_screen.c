@@ -12,8 +12,6 @@
 //Define states and mutexs
 SemaphoreHandle_t Screen_No_Mutex = NULL;
 int Screen_No = 0; 
-SemaphoreHandle_t Menu_Selected_Mutex = NULL;
-int Menu_Selected = 10;
 SemaphoreHandle_t Screen_Selected_Value_Mutex = NULL;
 int Screen_Selected_Value = 0;  
 SemaphoreHandle_t Display_Active_Mutex = NULL;
@@ -40,7 +38,10 @@ static void draw_menu_symbols(void)
 
 static void draw_standard_value_screen(const char* title, const char* line1, const char* line2)
 {
-    draw_menu_symbols();
+    draw_string(120,8,"{",NORMAL_SIZE, WHITE);
+    draw_string(120,20,"|",NORMAL_SIZE, WHITE);
+    draw_string(120,34,"+",NORMAL_SIZE, WHITE);
+    draw_string(120,48,"-",NORMAL_SIZE, WHITE);
 
     draw_string(0,0,title,NORMAL_SIZE, WHITE);
 
@@ -54,7 +55,6 @@ static void draw_standard_value_screen(const char* title, const char* line1, con
 void setup_menu_mutexs(void)
 {
     Screen_No_Mutex = xSemaphoreCreateMutex();
-    Menu_Selected_Mutex = xSemaphoreCreateMutex();
     Display_Active_Mutex = xSemaphoreCreateMutex();
     Screen_Selected_Value_Mutex = xSemaphoreCreateMutex();
     Menu_Locked_Mutex = xSemaphoreCreateMutex();
@@ -121,13 +121,13 @@ int reset_display_active_status(void)
 //SCREEN SELECTED
 
 //TODO: better exception handling here 
-void set_screen(int new_screen_no, int new_menu_selected)
+void set_screen(int new_screen_no, int new_screen_selected)
 {
     if( Screen_No_Mutex != NULL )
     {
         if( xSemaphoreTake( Screen_No_Mutex, ( TickType_t ) 10 ) == pdTRUE )
         {
-            set_menu_selected(new_menu_selected);
+            set_screen_selected_value(new_screen_selected);
             Screen_No = new_screen_no;
             redraw_screen(new_screen_no);
             xSemaphoreGive( Screen_No_Mutex );
@@ -143,75 +143,6 @@ int get_screen(void)
         {
             int returnval = Screen_No;
             xSemaphoreGive( Screen_No_Mutex );
-            return returnval;
-        }
-    }
-    return NULL;
-}
-
-//========================
-//MENU SELECTED 
-
-void set_menu_selected(int new_menu_selected)
-{
-    if( Menu_Selected_Mutex != NULL )
-    {
-        if( xSemaphoreTake( Menu_Selected_Mutex, ( TickType_t ) 10 ) == pdTRUE )
-        {
-            Menu_Selected = new_menu_selected;
-            xSemaphoreGive( Menu_Selected_Mutex );
-        }
-    }
-}
-
-void set_menu_selected_dec(int current_menu_last_item)
-{
-    if( Menu_Selected_Mutex != NULL )
-    {
-        if( xSemaphoreTake( Menu_Selected_Mutex, ( TickType_t ) 10 ) == pdTRUE )
-        {
-            if (Menu_Selected<1)
-            {
-                Menu_Selected = current_menu_last_item;
-            }
-            else
-            {
-                Menu_Selected--;
-            }
-            
-            xSemaphoreGive( Menu_Selected_Mutex );
-        }
-    }
-}
-
-void set_menu_selected_inc(int current_menu_last_item)
-{
-    if( Menu_Selected_Mutex != NULL )
-    {
-        if( xSemaphoreTake( Menu_Selected_Mutex, ( TickType_t ) 10 ) == pdTRUE )
-        {
-            if (Menu_Selected<current_menu_last_item)
-            {
-                Menu_Selected++;
-            }
-            else
-            {
-                Menu_Selected = 0;
-            }
-            xSemaphoreGive( Menu_Selected_Mutex );
-        }
-    }
-}
-
-
-int get_menu_selected(void)
-{
-    if( Menu_Selected_Mutex != NULL )
-    {
-        if( xSemaphoreTake( Menu_Selected_Mutex, ( TickType_t ) 10 ) == pdTRUE )
-        {
-            int returnval = Menu_Selected;
-            xSemaphoreGive( Menu_Selected_Mutex );
             return returnval;
         }
     }
@@ -328,7 +259,7 @@ void redraw_screen(int screen_no)
             sprintf(c,"%u",get_scene());
             draw_string(8,12,&c,NORMAL_SIZE, WHITE);
             draw_rect(6,10,14,20, WHITE, LEAVE);
-            switch (get_scene())
+            switch (get_scene())//TODO: Store this in an array somewhere
             {
                 case 1 :
                     draw_string(16,8,"Daytime",DOUBLE_SIZE, WHITE);
@@ -369,7 +300,7 @@ void redraw_screen(int screen_no)
         case SCREEN_MAIN_MENU :
             draw_menu_symbols();
 
-            if (get_menu_selected()<5) 
+            if (get_screen_selected_value()<5) 
             {
                 draw_string(0,0,"Main Menu 1/2",NORMAL_SIZE, WHITE);
                 draw_string(8,16,"Recall Scene",NORMAL_SIZE, WHITE);
@@ -379,7 +310,7 @@ void redraw_screen(int screen_no)
                 draw_string(8,48,"DMX Input Mode",NORMAL_SIZE, WHITE);
                 draw_string(8,56,"~",NORMAL_SIZE, WHITE); //Down arrow
                 
-                draw_string(0,(16+8*get_menu_selected()),"^",NORMAL_SIZE, WHITE); //Menu cursor
+                draw_string(0,(16+8*get_screen_selected_value()),"^",NORMAL_SIZE, WHITE); //Menu cursor
             }
             else
             {
@@ -387,7 +318,7 @@ void redraw_screen(int screen_no)
                 draw_string(8,16,"Lock Controls",NORMAL_SIZE, WHITE);
                 draw_string(8,8,"}",NORMAL_SIZE, WHITE); //Up arrow 
   
-                draw_string(0,(16+8*(get_menu_selected()-5)),"^",NORMAL_SIZE, WHITE); //Menu cursor
+                draw_string(0,(16+8*(get_screen_selected_value()-5)),"^",NORMAL_SIZE, WHITE); //Menu cursor
             }
 
             break;
@@ -404,7 +335,7 @@ void redraw_screen(int screen_no)
             draw_string(8,48,"Low Channel",NORMAL_SIZE, WHITE);
 
             //Actually the menu position cursor
-            draw_string(0,(16+8*get_menu_selected()),"^",NORMAL_SIZE, WHITE);
+            draw_string(0,(16+8*get_screen_selected_value()),"^",NORMAL_SIZE, WHITE);
             break;
 
 
@@ -413,7 +344,7 @@ void redraw_screen(int screen_no)
             break;
         case SCREEN_RECORD_SCENE :
 
-            if (get_menu_selected() == 0)
+            if (get_screen_selected_value() == 0)
             {
                 draw_standard_value_screen("Record Scene", "Select scene to", "overwrite:");           
             }
