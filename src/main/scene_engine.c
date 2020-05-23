@@ -8,6 +8,7 @@
 #include "freertos/task.h"
 
 #include "scene_engine.h"
+#include "storage.h"
 
 SemaphoreHandle_t Scene_No_Mutex = NULL;
 SemaphoreHandle_t Scene_Engine_Settings_Mutex = NULL;
@@ -15,6 +16,7 @@ int Scene_No = 1; //NB: This variable is 1 indexed
 int Scene_State = SCENE_STATE_STATIC;
 uint8_t last_fade_state[513] = {};
 uint8_t current_state[513] = {};
+uint8_t dmx_in_buffer[513] = {};
 uint8_t scenes[NUMBER_OF_SCENES][513] = {};
 int fade_time = 5; //TODO: not this as default
 float fade_proportion = 0;
@@ -92,27 +94,20 @@ void setup_scene_mutexs(void)
     Scene_Engine_Settings.sel_midhigh_ch = 4;
     Scene_Engine_Settings.sel_high_ch = 5;
 
-
-    //TODO: Setup fade time
+    //TODO: Setup fade time and other settings, read from file
     
-    //TEST CODE==============
-    for (int j=0;j<NUMBER_OF_SCENES;j++)
+    
+    for (int i=0;i<NUMBER_OF_SCENES;i++)
     {
-        for (int i=0;i<513;i++)
-        {
-            scenes[j][i]=0x00;
-        }
+        read_scene(i+1,scenes[i]);
     }
-    scenes[0][1]=0xFF;
-    scenes[0][2]=0xFF;
+    //TEST CODE==============
+    dmx_in_buffer[1]=0x43;
+    dmx_in_buffer[2]=0x23;
+    dmx_in_buffer[3]=0x78;
+    dmx_in_buffer[511]=0xAB;
+    dmx_in_buffer[512]=0xFB;
 
-    scenes[1][1]=0xFF;
-    scenes[1][3]=0xFF;
-
-    scenes[2][1]=0xFF;
-    scenes[2][4]=0xFF;
-
-    scenes[3][1]=0xFF;
     Scene_Engine_Settings.s2l_enable[3] = pdTRUE;  
     //=======================  
 }
@@ -212,9 +207,7 @@ void scene_calc_task(uint8_t* output)
 
     if (true) //If DMX Input active
     {
-        //Get background values
-        //HTP with current state
-        
+        //htp_513(current_state,dmx_input_buffer)
     }
 
     //TODO: Make this work with fading?
@@ -245,7 +238,14 @@ void scene_calc_task(uint8_t* output)
         }
     }
 
-    current_state[0]=0x00; // Make sure that we're outputting a dimmer frame just in case
+    current_state[0]=0x00; // DMX start code must be 0x00 for 'dimmer data'
     copy_513(current_state,output);
-    return NULL;
+}
+
+void record_scene(uint8_t scene)
+{
+    //TODO: Take mutexs for scene no and scene data and dmx data
+    //TODO: Should this not work if DMX input is not live?
+    copy_513(dmx_in_buffer,scenes[scene-1]);
+    write_scene(scene,dmx_in_buffer);
 }

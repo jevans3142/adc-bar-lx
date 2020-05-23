@@ -7,7 +7,7 @@
 //Pin defs
 
 //Not using RDM so simplex output only
-#define PIN_DMX_OUT (23)
+#define PIN_DMX_OUT (2)
 #define PIN_DMX_OUT_RTN UART_PIN_NO_CHANGE
 #define PIN_DMX_OUT_RTS UART_PIN_NO_CHANGE
 #define PIN_DMX_OUT_CTS UART_PIN_NO_CHANGE

@@ -24,7 +24,7 @@ void app_main(void)
     setup_display_mutexs();
 
     xTaskCreate(dmx_output_task, "dmx_output_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
-    xTaskCreate(button_poll_task, "button_poll_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
+    xTaskCreate(button_poll_task, "button_poll_task", 8192, NULL, DMX_OUT_TASK_PRIO, NULL);
     xTaskCreate(display_timeout_task, "display_timeout_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
     
     draw_string(0,0,"1.0",NORMAL_SIZE, WHITE);

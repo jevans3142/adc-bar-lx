@@ -9,6 +9,7 @@
 #include "redraw_screen.h"
 #include "screen_driver.h"
 #include "scene_engine.h"
+#include "storage.c"
 
 static void special_msg_pop_task(void) {
     vTaskDelay(SCREEN_MSG_POP_DURATION_MS);
@@ -57,6 +58,9 @@ static void menu_button_do(void)
         case SCREEN_S2L_L_CH :  
             set_screen(SCREEN_S2L_MENU,get_screen()-20);
             break;
+        case SCREEN_RECORD_CONFIRM :
+            set_screen(SCREEN_MAIN_MENU,SCREEN_RECORD_SCENE - 10);
+            break;
 
     }
 }
@@ -73,6 +77,7 @@ static void set_button_do(void)
         case SCREEN_MAIN_STATUS : //No action
             break;
         case SCREEN_MAIN_MENU :
+            //TODO - need to set value inits here for each screen
             set_screen(get_screen_selected_value()+10,0);
             break;
 
@@ -81,14 +86,14 @@ static void set_button_do(void)
             set_screen(SCREEN_MAIN_MENU, SCREEN_RECALL_SCENE - 10);
             break;
         case SCREEN_RECORD_SCENE :
-            //TODO
-            set_screen(SCREEN_MAIN_MENU, SCREEN_RECORD_SCENE - 10);
+            set_screen(SCREEN_RECORD_CONFIRM, get_screen_selected_value());
             break;
         case SCREEN_FADE_TIME :
             //TODO 
             set_screen(SCREEN_MAIN_MENU, SCREEN_FADE_TIME - 10);
             break;
         case SCREEN_S2L_MENU :
+            //TODO - need to set value inits here for each screen
             set_screen(get_screen_selected_value()+20,0);
             break;
         case SCREEN_DMX_MODE : 
@@ -120,7 +125,12 @@ static void set_button_do(void)
             //TODO 
             set_screen(SCREEN_S2L_MENU, SCREEN_S2L_L_CH - 20);
             break;
-        
+
+        case SCREEN_RECORD_CONFIRM :
+            record_scene(get_screen_selected_value());
+            set_screen(SCREEN_MAIN_MENU, SCREEN_RECORD_SCENE - 10);
+            break;
+
         case SCREEN_UNLOCK_CTRLS :
             if (get_screen_selected_value()==get_lock_code())
             {
@@ -147,6 +157,7 @@ static void up_button_do(void)
     switch (get_screen())
     {
         case SCREEN_MAIN_STATUS : // No action
+        case SCREEN_RECORD_CONFIRM :
             break;
         case SCREEN_MAIN_MENU : 
             set_screen_selected_value_dec(5,0);
@@ -201,6 +212,7 @@ static void down_button_do(void)
     switch (get_screen())
     {
         case SCREEN_MAIN_STATUS : //No action
+        case SCREEN_RECORD_CONFIRM :
             break;
         case SCREEN_MAIN_MENU :
             set_screen_selected_value_inc(5,0);
@@ -246,7 +258,26 @@ static void down_button_do(void)
     }
 }
 
-int scene_button_decode(void)
+static void special_flash_task(void) {
+    for (int i=0;i<6;i++)
+    {
+        gpio_set_level(PIN_SCENE_LEDS_BIT_1, 0);
+        gpio_set_level(PIN_SCENE_LEDS_BIT_2, 0);
+        gpio_set_level(PIN_SCENE_LEDS_BIT_4, 0);
+        vTaskDelay(BUTTON_FLASH_INTERVAL_MS);
+        gpio_set_level(PIN_SCENE_LEDS_BIT_1, 0);
+        gpio_set_level(PIN_SCENE_LEDS_BIT_2, 1);
+        gpio_set_level(PIN_SCENE_LEDS_BIT_4, 1);
+        vTaskDelay(BUTTON_FLASH_INTERVAL_MS);
+    }
+    int scene_no = get_scene();
+    gpio_set_level(PIN_SCENE_LEDS_BIT_1, (scene_no & 1));
+    gpio_set_level(PIN_SCENE_LEDS_BIT_2, (scene_no & 2));
+    gpio_set_level(PIN_SCENE_LEDS_BIT_4, (scene_no & 4));
+    vTaskDelete(NULL);
+}
+
+static int scene_button_decode(void)
 {
     return ( (1 * !gpio_get_level(PIN_SCENE_BUTTONS_BIT_1)) + (2 * !gpio_get_level(PIN_SCENE_BUTTONS_BIT_2)) + (4 * !gpio_get_level(PIN_SCENE_BUTTONS_BIT_4)) );
 }
@@ -314,11 +345,22 @@ void button_poll_task(void)
         {
             if (scene_state != 0)
             {
-                scene_state = 0;
-                set_scene(scene_number);
-                if (get_screen()==0)
+                //First check if this is the special record function
+                if (scene_number==6 && scene_counter>500)
                 {
-                    redraw_screen(0);
+                    //Record special scene
+                    scene_state = 0;
+                    record_scene(6);
+                    xTaskCreate(special_flash_task, "special_flash_task", 2048, NULL, 5, NULL);
+                }
+                else 
+                {
+                    scene_state = 0;
+                    set_scene(scene_number);
+                    if (get_screen()==0)
+                    {
+                        redraw_screen(0); 
+                    } 
                 }
             }
             scene_counter = 0;
@@ -341,9 +383,6 @@ void button_poll_task(void)
         {
             scene_state = 1;   
         }
-
-    
-        
 
         vTaskDelay(BUTTON_POLL_INTERVAL_MS);
     }      

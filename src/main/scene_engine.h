@@ -32,10 +32,14 @@ struct Scene_Engine_Settings_Struct {
 }; 
 
 void setup_scene_mutexs(void);
+
 void set_scene(int new_scene_no);
 int get_scene(void);
-void set_scene_engine_settings(struct Scene_Engine_Settings_Struct new_Scene_Engine_Settings);
-struct Scene_Engine_Settings_Struct get_scene_engine_settings(void);
+
+//void set_scene_engine_settings(struct Scene_Engine_Settings_Struct new_Scene_Engine_Settings);
+//struct Scene_Engine_Settings_Struct get_scene_engine_settings(void);
+
 void scene_calc_task(uint8_t* output);
+void record_scene(uint8_t scene_no);
 
 #endif  

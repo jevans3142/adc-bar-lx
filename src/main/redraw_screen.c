@@ -343,23 +343,17 @@ void redraw_screen(int screen_no)
             draw_standard_value_screen("Recall Scene", "Select scene to", "recall:"); 
             break;
         case SCREEN_RECORD_SCENE :
+            draw_standard_value_screen("Record Scene", "Select scene to", "overwrite:");   
+            break;        
+        case SCREEN_RECORD_CONFIRM :
+            draw_string(0,0,"Record Scene",NORMAL_SIZE, WHITE);
+            draw_string(120,8,"{",NORMAL_SIZE, WHITE);
+            draw_string(120,20,"|",NORMAL_SIZE, WHITE);
 
-            if (get_screen_selected_value() == 0)
-            {
-                draw_standard_value_screen("Record Scene", "Select scene to", "overwrite:");           
-            }
-            else
-            {
-                draw_string(0,0,"Record Scene",NORMAL_SIZE, WHITE);
-                draw_string(120,8,"{",NORMAL_SIZE, WHITE);
-                draw_string(120,20,"|",NORMAL_SIZE, WHITE);
-
-                draw_string(8,12,"Are you sure?",NORMAL_SIZE, WHITE);
-                draw_string(8,28,"This scene will",NORMAL_SIZE, WHITE);
-                draw_string(8,36,"be written when |",NORMAL_SIZE, WHITE);
-                draw_string(8,44,"is pressed.",NORMAL_SIZE, WHITE);
-            }
-
+            draw_string(8,12,"Are you sure?",NORMAL_SIZE, WHITE);
+            draw_string(8,28,"This scene will",NORMAL_SIZE, WHITE);
+            draw_string(8,36,"be written when |",NORMAL_SIZE, WHITE);
+            draw_string(8,44,"is pressed.",NORMAL_SIZE, WHITE);
             break;
         case SCREEN_FADE_TIME : 
             draw_standard_value_screen("Fade time", "Select new", "fade time:");
