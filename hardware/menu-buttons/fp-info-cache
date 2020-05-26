@@ -1,4 +1,4 @@
-16369001033129717
+16370582427335717
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -28210,6 +28210,13 @@ Surface mounted pin header SMD 2x40 2.00mm double row
 80
 80
 Connector_PinHeader_2.54mm
+Molex_KK254_1x04Vertical
+Through hole straight pin header, 1x05, 2.54mm pitch, single row
+Through hole pin header THT 1x05 2.54mm single row
+0
+4
+4
+Connector_PinHeader_2.54mm
 Molex_KK254_1x05Vertical
 Through hole straight pin header, 1x05, 2.54mm pitch, single row
 Through hole pin header THT 1x05 2.54mm single row
@@ -36950,8 +36957,8 @@ RJ45_RS_Pro_8_way_RJ45
 8 Pol Shallow Latch Connector, Modjack, RJ45 (https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/c-bmj-0102.pdf)
 RJ45
 0
-8
-8
+10
+9
 Connector_RJ
 RJ45_Wuerth_7499010121A_Horizontal
 10/100Base-TX RJ45 ethernet magnetic transformer connector horizontal https://katalog.we-online.de/pbs/datasheet/7499010121A.pdf

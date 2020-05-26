@@ -490,4 +490,37 @@ NoConn ~ 2600 6600
 NoConn ~ 2600 6700
 NoConn ~ 2600 6800
 NoConn ~ 2600 6900
+$Comp
+L Regulator_Switching:TMA_0505S U?
+U 1 1 5E9BA76B
+P 4000 1650
+F 0 "U?" H 4000 2117 50  0000 C CNN
+F 1 "TMA_0505S" H 4000 2026 50  0000 C CNN
+F 2 "Converter_DCDC:Traco_TMA_DCDCsingle" H 4000 1300 50  0001 C CNN
+F 3 "http://assets.tracopower.com/TMR1/documents/tmr1-datasheet.pdf" H 4000 1150 50  0001 C CNN
+	1    4000 1650
+	1    0    0    -1  
+$EndComp
+$Comp
+L Regulator_Switching:TMA_0505S U?
+U 1 1 5E9BC0CB
+P 4000 2600
+F 0 "U?" H 4000 3067 50  0000 C CNN
+F 1 "TMA_0505S" H 4000 2976 50  0000 C CNN
+F 2 "Converter_DCDC:Traco_TMA_DCDCsingle" H 4000 2250 50  0001 C CNN
+F 3 "http://assets.tracopower.com/TMR1/documents/tmr1-datasheet.pdf" H 4000 2100 50  0001 C CNN
+	1    4000 2600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:6N136 U?
+U 1 1 5E9BE7CA
+P 6050 2050
+F 0 "U?" H 6050 2475 50  0000 C CNN
+F 1 "6N136" H 6050 2384 50  0000 C CNN
+F 2 "Package_DIP:DIP-8_W7.62mm" H 5850 1750 50  0001 L CIN
+F 3 "https://optoelectronics.liteon.com/upload/download/DS70-2008-0032/6N135-L%206N136-L%20series.pdf" H 6050 2050 50  0001 L CNN
+	1    6050 2050
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

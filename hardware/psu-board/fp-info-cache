@@ -1,4 +1,4 @@
-16378514957224717
+16378515188661717
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -49960,11 +49960,11 @@ PocketBeagle
 72
 Module
 ESP32_DOIT30
-32-bit microcontroller module with WiFi, https://www.adafruit.com/product/2471
-ESP8266 WiFi microcontroller
+32-bit microcontroller module with WiFi
+
 0
-20
-20
+30
+30
 Module
 Maple_Mini
 Maple Mini, http://docs.leaflabs.com/static.leaflabs.com/pub/leaflabs/maple-docs/0.0.12/hardware/maple-mini.html

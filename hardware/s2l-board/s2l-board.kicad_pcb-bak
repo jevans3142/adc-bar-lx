@@ -2,7 +2,7 @@
 
   (general
     (thickness 1.6)
-    (drawings 8)
+    (drawings 7)
     (tracks 155)
     (zones 0)
     (modules 65)
@@ -3263,9 +3263,6 @@
     )
   )
 
-  (gr_text "ADC Theatre Bar\nLighting Controller\nSound to Light Rev A" (at 113.03 46.99) (layer F.SilkS)
-    (effects (font (size 1.5 1.5) (thickness 0.3)) (justify left))
-  )
   (gr_text "To uC" (at 187.96 110.49) (layer F.SilkS) (tstamp 5ECD8732)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
