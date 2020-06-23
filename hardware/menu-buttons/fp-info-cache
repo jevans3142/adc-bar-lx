@@ -1,4 +1,4 @@
-16370582427335717
+16378515188661717
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -28210,6 +28210,13 @@ Surface mounted pin header SMD 2x40 2.00mm double row
 80
 80
 Connector_PinHeader_2.54mm
+Krone_4_Way_terminal
+
+
+0
+6
+5
+Connector_PinHeader_2.54mm
 Molex_KK254_1x04Vertical
 Through hole straight pin header, 1x05, 2.54mm pitch, single row
 Through hole pin header THT 1x05 2.54mm single row
@@ -41237,6 +41244,13 @@ recom power ac dc
 5
 5
 Converter_ACDC
+Converter_ACDC_RECOM_RAC10-150K
+
+recom power ac dc
+0
+5
+5
+Converter_ACDC
 Converter_ACDC_TRACO_TMG-15_THT
 ACDC-Converter, TRACO, TMG Series 15 https://www.tracopower.com/products/tmg.pdf
 ACDC-Converter TRACO TMG Series 15
@@ -41649,6 +41663,13 @@ https://power.murata.com/data/power/oki-78sr.pdf
 0
 3
 3
+Converter_DCDC
+Traco_TMA_DCDCsingle
+DCDC-Converter, TRACO, TMR xxxx, Single/Dual output, http://www.datasheetlib.com/datasheet/135136/tmr-2-2410e_traco-power.html?page=3#datasheet
+DCDC-Converter TRACO TMRxxxx Single/Dual_output
+0
+4
+4
 Crystal
 Crystal_AT310_D3.0mm_L10.0mm_Horizontal
 Crystal THT AT310 10.0mm-10.5mm length 3.0mm diameter http://www.cinetech.com.tw/upload/2011/04/20110401165201.pdf
@@ -49937,6 +49958,13 @@ PocketBeagle
 0
 72
 72
+Module
+ESP32_DOIT30
+32-bit microcontroller module with WiFi
+
+0
+30
+30
 Module
 Maple_Mini
 Maple Mini, http://docs.leaflabs.com/static.leaflabs.com/pub/leaflabs/maple-docs/0.0.12/hardware/maple-mini.html
@@ -65138,6 +65166,13 @@ Relay_THT
 Relay_DPDT_Panasonic_JW2
 Panasonic Relay DPDT, http://www3.panasonic.biz/ac/e_download/control/relay/power/catalog/mech_eng_jw.pdf?via=ok
 Panasonic Relay DPDT
+0
+8
+8
+Relay_THT
+Relay_DPDT_RSPro_H115F
+Relay SPST Schrack-RT1 RM5mm 16A 250V AC Form C http://image.schrack.com/datenblaetter/h_rt114012--_de.pdf
+Relay SPST Schrack-RT1 RM5mm 16A 250V AC Relay
 0
 8
 8

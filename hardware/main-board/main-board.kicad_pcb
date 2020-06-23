@@ -1365,7 +1365,7 @@
     (fp_text reference R4 (at 5.08 -2.37 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 120R (at 5.08 2.37 90) (layer F.Fab)
+    (fp_text value 4.7k (at 5.08 2.37 90) (layer F.Fab)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text user %R (at 5.08 0 90) (layer F.Fab)
