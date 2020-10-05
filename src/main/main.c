@@ -23,7 +23,9 @@ void app_main(void)
     setup_scene_mutexs();
     setup_display_mutexs();
 
+    //TODO: Adjust buffers and priorities 
     xTaskCreate(dmx_output_task, "dmx_output_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
+    xTaskCreate(dmx_input_task, "dmx_input_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
     xTaskCreate(button_poll_task, "button_poll_task", 8192, NULL, DMX_OUT_TASK_PRIO, NULL);
     xTaskCreate(display_timeout_task, "display_timeout_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
     

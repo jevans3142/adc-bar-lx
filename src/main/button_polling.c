@@ -18,7 +18,7 @@ static void special_msg_pop_task(void) {
 }
 
 static void menu_button_do(void)
-{   
+{ 
     if (reset_display_active_status() == 1)
     {
         return;

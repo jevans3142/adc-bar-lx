@@ -12,6 +12,8 @@
 
 SemaphoreHandle_t Scene_No_Mutex = NULL;
 SemaphoreHandle_t Scene_Engine_Settings_Mutex = NULL;
+SemaphoreHandle_t DMX_Input_Buffer_Mutex = NULL;
+
 int Scene_No = 1; //NB: This variable is 1 indexed
 int Scene_State = SCENE_STATE_STATIC;
 uint8_t last_fade_state[513] = {};
@@ -68,6 +70,7 @@ void setup_scene_mutexs(void)
 {
     Scene_No_Mutex = xSemaphoreCreateMutex();
     Scene_Engine_Settings_Mutex = xSemaphoreCreateMutex();
+    DMX_Input_Buffer_Mutex = xSemaphoreCreateMutex();
 
     gpio_config_t io_conf;
     io_conf.intr_type = GPIO_PIN_INTR_DISABLE;
@@ -207,7 +210,7 @@ void scene_calc_task(uint8_t* output)
 
     if (true) //If DMX Input active
     {
-        //htp_513(current_state,dmx_input_buffer)
+        htp_513(current_state,dmx_in_buffer);
     }
 
     //TODO: Make this work with fading?
@@ -248,4 +251,11 @@ void record_scene(uint8_t scene)
     //TODO: Should this not work if DMX input is not live?
     copy_513(dmx_in_buffer,scenes[scene-1]);
     write_scene(scene,dmx_in_buffer);
+}
+
+void store_dmx_input_value(uint16_t address, uint8_t value)
+{
+    //TODO; make threadsafe 
+    //xSemaphoreTake(DMX_Input_Buffer_Mutex, ( TickType_t ) 10 );
+    dmx_in_buffer[address] = value;
 }

@@ -11,11 +11,17 @@
 #define PIN_DMX_OUT_RTN UART_PIN_NO_CHANGE
 #define PIN_DMX_OUT_RTS UART_PIN_NO_CHANGE
 #define PIN_DMX_OUT_CTS UART_PIN_NO_CHANGE
+#define PIN_DMX_IN (36)
+#define PIN_DMX_IN_RTN UART_PIN_NO_CHANGE
+#define PIN_DMX_IN_RTS UART_PIN_NO_CHANGE
+#define PIN_DMX_IN_CTS UART_PIN_NO_CHANGE
 
 //UART setup
 #define DMX_BAUD_RATE (250000)
 #define DMX_OUT_PORT (UART_NUM_2)
 #define DMX_OUT_BUFFER_SIZE (513)
+#define DMX_IN_PORT (UART_NUM_1)
+#define DMX_IN_BUFFER_SIZE (513)
 
 //Timings from DMX specification
 #define DMX_OUT_START_BREAK_US (92)
@@ -25,5 +31,6 @@
 #define NOP() asm volatile ("nop")
 
 void dmx_output_task(void);
+void dmx_input_task(void);
 
 #endif  

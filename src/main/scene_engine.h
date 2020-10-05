@@ -41,5 +41,6 @@ int get_scene(void);
 
 void scene_calc_task(uint8_t* output);
 void record_scene(uint8_t scene_no);
+void store_dmx_input_value(uint16_t address, uint8_t value);
 
 #endif  
