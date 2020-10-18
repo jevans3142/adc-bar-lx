@@ -12,7 +12,9 @@
 #include "driver/sdspi_host.h"
 #include "sdmmc_cmd.h"
 
+#include "scene_engine.h"
 #include "storage.h"
+
 
 static const char *TAG = "storage";
 
@@ -113,4 +115,42 @@ int read_scene(int scene_number, uint8_t* scene_data)
     ESP_LOGI(TAG, "File read");
     deinit_sd_card();
     return 1;
+}
+
+void write_settings(struct Scene_Engine_Settings_Struct input)
+{
+    init_sd_card();
+
+    ESP_LOGI(TAG, "Opening settings file");
+    FILE* f = fopen("/sdcard/settings.stg", "w");
+    if (f == NULL) {
+        ESP_LOGE(TAG, "Failed to open settings file for writing");
+        return;
+    }
+
+    fwrite (&input, sizeof(struct Scene_Engine_Settings_Struct), 1, f); 
+    
+    fclose(f);
+    ESP_LOGI(TAG, "Settings file written");
+    deinit_sd_card();
+
+}
+
+struct Scene_Engine_Settings_Struct read_settings()
+{
+    init_sd_card();
+
+    ESP_LOGI(TAG, "Opening settings file");
+    FILE* f = fopen("/sdcard/settings.stg", "r");
+    if (f == NULL) {
+        ESP_LOGE(TAG, "Failed to open file for writing");
+    }
+
+    struct Scene_Engine_Settings_Struct temp;
+    fread(&temp, sizeof(struct Scene_Engine_Settings_Struct), 1, f);
+    
+    fclose(f);
+    ESP_LOGI(TAG, "File read");
+    deinit_sd_card();
+    return temp;
 }

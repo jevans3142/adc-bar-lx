@@ -12,7 +12,7 @@
 
 void write_scene(int scene_number, uint8_t* scene_data);
 int read_scene(int scene_number, uint8_t* scene_data);
-void write_settings(void);
-void read_settings(void);
+void write_settings(struct Scene_Engine_Settings_Struct input);
+struct Scene_Engine_Settings_Struct read_settings(void);
 
 #endif  
