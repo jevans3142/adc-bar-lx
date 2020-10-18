@@ -20,7 +20,13 @@ SemaphoreHandle_t Menu_Locked_Mutex = NULL;
 int Menu_Locked_Code = 0; 
 unsigned long Display_Active_Timeout = 0;
 
-char c[20]; 
+//String buffer we can use for rendering data
+
+char string_buffer[MAX_STRING_LENGTH];
+
+//Scene names 
+
+const char *scene_names[] = { "Daytime", "Evening 1", "Evening 2", "Party", "Show", "Special", "Off" }; 
 
 static unsigned long IRAM_ATTR millis()
 {
@@ -48,8 +54,8 @@ static void draw_standard_value_screen(const char* title, const char* line1, con
     draw_string(8,12,line1,NORMAL_SIZE, WHITE);
     draw_string(8,20,line2,NORMAL_SIZE, WHITE);
 
-    sprintf(c,"%u",get_screen_selected_value());
-    draw_string(16,32,&c,DOUBLE_SIZE, BLACK);
+    sprintf(string_buffer,"%u",get_screen_selected_value());
+    draw_string(16,32,&string_buffer,DOUBLE_SIZE, BLACK);
 }
 
 void setup_menu_mutexs(void)
@@ -256,37 +262,23 @@ void redraw_screen(int screen_no)
         case SCREEN_MAIN_STATUS :
             draw_line(0,28,128,28, WHITE);
             draw_line(64,28,64,64, WHITE);
-            sprintf(c,"%u",get_scene());
-            draw_string(8,12,&c,NORMAL_SIZE, WHITE);
+            sprintf(string_buffer,"%u",get_scene());
+            draw_string(8,12,&string_buffer,NORMAL_SIZE, WHITE);
             draw_rect(6,10,14,20, WHITE, LEAVE);
-            switch (get_scene())//TODO: Store this in an array somewhere
-            {
-                case 1 :
-                    draw_string(16,8,"Daytime",DOUBLE_SIZE, WHITE);
-                    break;
-                case 2 :
-                    draw_string(16,8,"Evening 1",DOUBLE_SIZE, WHITE);
-                    break;
-                case 3 :
-                    draw_string(16,8,"Evening 2",DOUBLE_SIZE, WHITE);
-                    break;
-                case 4 : 
-                    draw_string(16,8,"Party",DOUBLE_SIZE, WHITE);
-                    break;
-                case 5 :
-                    draw_string(16,8,"Show",DOUBLE_SIZE, WHITE);
-                    break;
-                case 6 :
-                    draw_string(16,8,"Special",DOUBLE_SIZE, WHITE);
-                    break;
-                case 7 :
-                    draw_string(16,8,"Off",DOUBLE_SIZE, WHITE);
-                    break;
-            }
+            draw_string(16,8,scene_names[get_scene()-1],DOUBLE_SIZE, WHITE);
             
             draw_string(70,30,"Audio in",NORMAL_SIZE, WHITE);
             draw_string(12,30,"DMX in",NORMAL_SIZE, WHITE);
-            draw_string(12,40,"OFF",DOUBLE_SIZE, WHITE);
+            switch (get_scene_engine_settings().dmx_input_mode)
+            {
+                case DMX_MODE_OFF :
+                    draw_string(12,40,"OFF",DOUBLE_SIZE, WHITE);
+                    break;
+                case DMX_MODE_HTP :
+                    draw_string(12,40,"HTP",DOUBLE_SIZE, WHITE);
+                    break;
+            }
+            
             if (get_lock_code()!=0)
             {
                 draw_string(120,8,"$",NORMAL_SIZE, WHITE); // Actually the padlock icon
@@ -341,9 +333,11 @@ void redraw_screen(int screen_no)
 
         case SCREEN_RECALL_SCENE :
             draw_standard_value_screen("Recall Scene", "Select scene to", "recall:"); 
+            draw_string(42,36,scene_names[get_screen_selected_value()-1],NORMAL_SIZE, WHITE);
             break;
         case SCREEN_RECORD_SCENE :
-            draw_standard_value_screen("Record Scene", "Select scene to", "overwrite:");   
+            draw_standard_value_screen("Record Scene", "Select scene to", "overwrite:"); 
+            draw_string(42,36,scene_names[get_screen_selected_value()-1],NORMAL_SIZE, WHITE);  
             break;        
         case SCREEN_RECORD_CONFIRM :
             draw_string(0,0,"Record Scene",NORMAL_SIZE, WHITE);
@@ -357,6 +351,7 @@ void redraw_screen(int screen_no)
             break;
         case SCREEN_FADE_TIME : 
             draw_standard_value_screen("Fade time", "Select new", "fade time:");
+            draw_string(42,38,"seconds",NORMAL_SIZE, WHITE);
             break;
         case SCREEN_DMX_MODE :
             draw_menu_symbols();
@@ -368,10 +363,10 @@ void redraw_screen(int screen_no)
 
             switch (get_screen_selected_value())
             {
-                case 0 : //TODO: Make thse defined constants
+                case DMX_MODE_OFF :
                     draw_string(16,32,"Off",DOUBLE_SIZE, BLACK); 
                     break;
-                case 1 : 
+                case DMX_MODE_HTP : 
                     draw_string(16,32,"HTP",DOUBLE_SIZE, BLACK); 
                     break;
             }
@@ -390,10 +385,10 @@ void redraw_screen(int screen_no)
 
             switch (get_screen_selected_value())
             {
-                case 0 : //TODO: Make thse defined constants
+                case S2L_MODE_OFF :
                     draw_string(16,32,"Off",DOUBLE_SIZE, BLACK); 
                     break;
-                case 1 : 
+                case S2L_MODE_PULSE : 
                     draw_string(16,32,"Pulse",DOUBLE_SIZE, BLACK); 
                     break;
             }

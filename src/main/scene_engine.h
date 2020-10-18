@@ -18,11 +18,16 @@
 #define S2L_MODE_OFF 0
 #define S2L_MODE_PULSE 1
 
+#define DMX_MODE_OFF 0
+#define DMX_MODE_HTP 1
+
 #define NUMBER_OF_SCENES 7
 
 #define SCENE_CALC_INTERVAL_MS ( 500 / portTICK_PERIOD_MS)
 
 struct Scene_Engine_Settings_Struct {
+    uint8_t fade_time;
+    uint8_t dmx_input_mode;
     bool s2l_enable[NUMBER_OF_SCENES];
     uint8_t s2l_mode;
     uint16_t sel_low_ch;
@@ -31,13 +36,13 @@ struct Scene_Engine_Settings_Struct {
     uint16_t sel_high_ch;
 }; 
 
-void setup_scene_mutexs(void);
+void setup_scene_engine(void);
 
 void set_scene(int new_scene_no);
 int get_scene(void);
 
-//void set_scene_engine_settings(struct Scene_Engine_Settings_Struct new_Scene_Engine_Settings);
-//struct Scene_Engine_Settings_Struct get_scene_engine_settings(void);
+void set_scene_engine_settings(struct Scene_Engine_Settings_Struct new_Scene_Engine_Settings);
+struct Scene_Engine_Settings_Struct get_scene_engine_settings(void);
 
 void scene_calc_task(uint8_t* output);
 void record_scene(uint8_t scene_no);

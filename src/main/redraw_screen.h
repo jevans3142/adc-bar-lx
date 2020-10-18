@@ -6,6 +6,8 @@
 
 #define DISPLAY_ACTIVE_INTERVAL_MS ( 1000 / portTICK_PERIOD_MS)
 
+#define MAX_STRING_LENGTH 20
+
 //Define screen IDs 
 
 #define SCREEN_MAIN_STATUS 0
@@ -47,5 +49,7 @@ void set_lock_code(int new_lock_code);
 int get_lock_code(void);
 
 void redraw_screen(int screen_no);
+
+
 
 #endif  

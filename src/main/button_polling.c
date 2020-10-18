@@ -11,6 +11,8 @@
 #include "scene_engine.h"
 #include "storage.c"
 
+struct Scene_Engine_Settings_Struct Scene_Engine_Settings_temp;
+
 static void special_msg_pop_task(void) {
     vTaskDelay(SCREEN_MSG_POP_DURATION_MS);
     redraw_screen(get_screen());
@@ -74,71 +76,141 @@ static void set_button_do(void)
     
     switch (get_screen())
     {
-        case SCREEN_MAIN_STATUS : //No action
+        case SCREEN_MAIN_STATUS : 
+            // No action
             break;
         case SCREEN_MAIN_MENU :
-            //TODO - need to set value inits here for each screen
-            set_screen(get_screen_selected_value()+10,0);
+            // Going from main menu into subscreen
+            switch (get_screen_selected_value() + 10)
+            {
+                case SCREEN_RECALL_SCENE :
+                    set_screen(SCREEN_RECALL_SCENE, 1);
+                    break;
+                case SCREEN_RECORD_SCENE :
+                    set_screen(SCREEN_RECORD_SCENE, 1);
+                    break;
+                case SCREEN_FADE_TIME :
+                    set_screen(SCREEN_FADE_TIME, get_scene_engine_settings().fade_time);
+                    break;
+                case SCREEN_S2L_MENU :
+                    set_screen(SCREEN_S2L_MENU, 0);
+                    break;
+                case SCREEN_DMX_MODE :
+                    set_screen(SCREEN_DMX_MODE, get_scene_engine_settings().dmx_input_mode);
+                    break;
+                case SCREEN_LOCK_CTRLS :
+                    set_screen(SCREEN_LOCK_CTRLS, get_lock_code());
+                    break;
+            }
+            
             break;
 
         case SCREEN_RECALL_SCENE :
+            // Recall the selected scene 
             set_scene(get_screen_selected_value());
             set_screen(SCREEN_MAIN_MENU, SCREEN_RECALL_SCENE - 10);
             break;
         case SCREEN_RECORD_SCENE :
+            // Go to the record confirmation screen
             set_screen(SCREEN_RECORD_CONFIRM, get_screen_selected_value());
             break;
         case SCREEN_FADE_TIME :
-            //TODO 
+            // Set the fade time
+            Scene_Engine_Settings_temp = get_scene_engine_settings();
+            Scene_Engine_Settings_temp.fade_time = get_screen_selected_value();
+            set_scene_engine_settings(Scene_Engine_Settings_temp);
             set_screen(SCREEN_MAIN_MENU, SCREEN_FADE_TIME - 10);
             break;
+
         case SCREEN_S2L_MENU :
-            //TODO - need to set value inits here for each screen
-            set_screen(get_screen_selected_value()+20,0);
+            // Going from sound to light menu into subscreen
+            switch (get_screen_selected_value() + 20)
+            {
+                case SCREEN_S2L_MODE :
+                    set_screen(SCREEN_S2L_MODE, get_scene_engine_settings().s2l_mode);
+                    break;
+                case SCREEN_S2L_H_CH :
+                    set_screen(SCREEN_S2L_H_CH, get_scene_engine_settings().sel_high_ch);
+                    break;
+                case SCREEN_S2L_MH_CH :
+                    set_screen(SCREEN_S2L_MH_CH, get_scene_engine_settings().sel_midhigh_ch);
+                    break;
+                case SCREEN_S2L_ML_CH  :
+                    set_screen(SCREEN_S2L_ML_CH, get_scene_engine_settings().sel_midlow_ch);
+                    break;
+                case SCREEN_S2L_L_CH  :
+                    set_screen(SCREEN_S2L_L_CH, get_scene_engine_settings().sel_low_ch);
+                    break;
+            }
+
             break;
+
         case SCREEN_DMX_MODE : 
-            //TODO
+            // Set the DMX mode
+            Scene_Engine_Settings_temp = get_scene_engine_settings();
+            Scene_Engine_Settings_temp.dmx_input_mode = get_screen_selected_value();
+            set_scene_engine_settings(Scene_Engine_Settings_temp);
             set_screen(SCREEN_MAIN_MENU, SCREEN_DMX_MODE - 10);
             break;
         case SCREEN_LOCK_CTRLS : 
+            //Set the lock code and lock the display 
             set_lock_code(get_screen_selected_value());
             set_screen(SCREEN_MAIN_STATUS, 0);
             break;
 
         case SCREEN_S2L_MODE : 
-            //TODO
+            // Set the sound to light mode
+            Scene_Engine_Settings_temp = get_scene_engine_settings();
+            Scene_Engine_Settings_temp.s2l_mode = get_screen_selected_value();
+            set_scene_engine_settings(Scene_Engine_Settings_temp);
             set_screen(SCREEN_S2L_MENU, SCREEN_S2L_MODE - 20);
             break;
         case SCREEN_S2L_H_CH :
-            //TODO
+            // Set the sound to light high channel
+            Scene_Engine_Settings_temp = get_scene_engine_settings();
+            Scene_Engine_Settings_temp.sel_high_ch = get_screen_selected_value();
+            set_scene_engine_settings(Scene_Engine_Settings_temp);
             set_screen(SCREEN_S2L_MENU, SCREEN_S2L_H_CH  - 20);
             break;
         case SCREEN_S2L_MH_CH : 
-            //TODO
+            // Set the sound to light mid high channel
+            Scene_Engine_Settings_temp = get_scene_engine_settings();
+            Scene_Engine_Settings_temp.sel_midhigh_ch = get_screen_selected_value();
+            set_scene_engine_settings(Scene_Engine_Settings_temp);
             set_screen(SCREEN_S2L_MENU, SCREEN_S2L_MH_CH - 20);
             break;
         case SCREEN_S2L_ML_CH :
-            //TODO 
+            // Set the sound to light mid low channel
+            Scene_Engine_Settings_temp = get_scene_engine_settings();
+            Scene_Engine_Settings_temp.sel_midlow_ch = get_screen_selected_value();
+            set_scene_engine_settings(Scene_Engine_Settings_temp);
             set_screen(SCREEN_S2L_MENU, SCREEN_S2L_ML_CH  - 20);
             break;
         case SCREEN_S2L_L_CH : 
-            //TODO 
+            // Set the sound to light low channel
+            Scene_Engine_Settings_temp = get_scene_engine_settings();
+            Scene_Engine_Settings_temp.sel_low_ch = get_screen_selected_value();
+            set_scene_engine_settings(Scene_Engine_Settings_temp);
             set_screen(SCREEN_S2L_MENU, SCREEN_S2L_L_CH - 20);
             break;
 
         case SCREEN_RECORD_CONFIRM :
+            // Record the current DMX input to the selected scene
             record_scene(get_screen_selected_value());
             set_screen(SCREEN_MAIN_MENU, SCREEN_RECORD_SCENE - 10);
             break;
 
         case SCREEN_UNLOCK_CTRLS :
+            // Determine if the unlock code is correct 
             if (get_screen_selected_value()==get_lock_code())
             {
+                // Yes - unlock the display
                 set_lock_code(0);
                 set_screen(SCREEN_MAIN_MENU,0);
             } 
             else
             {
+                // No - display an X for a few seconds
                 draw_string(70,32,"X",DOUBLE_SIZE, WHITE);
                 refresh_display();
                 xTaskCreate(special_msg_pop_task, "special_msg_pop_task", 2048, NULL, 5, NULL);
@@ -156,8 +228,11 @@ static void up_button_do(void)
     
     switch (get_screen())
     {
-        case SCREEN_MAIN_STATUS : // No action
+        case SCREEN_MAIN_STATUS : 
+            // No action
+            break;
         case SCREEN_RECORD_CONFIRM :
+            // No action
             break;
         case SCREEN_MAIN_MENU : 
             set_screen_selected_value_dec(5,0);
@@ -211,11 +286,14 @@ static void down_button_do(void)
 
     switch (get_screen())
     {
-        case SCREEN_MAIN_STATUS : //No action
+        case SCREEN_MAIN_STATUS : 
+            // No action
+            break;
         case SCREEN_RECORD_CONFIRM :
+            // No action
             break;
         case SCREEN_MAIN_MENU :
-            set_screen_selected_value_inc(5,0);
+            set_screen_selected_value_inc(5,0); //TODO: Replace magic numbers
             redraw_screen(get_screen());
             break;
         case SCREEN_RECALL_SCENE :
