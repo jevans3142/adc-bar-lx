@@ -4,6 +4,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
 #include "freertos/task.h"
+#include "esp_err.h"
+#include "esp_log.h"
 #include "esp_system.h"
 #include "nvs_flash.h"
 #include "driver/gpio.h"
@@ -16,6 +18,11 @@
 #include "redraw_screen.h"
 #include "scene_engine.h"
 
+TaskHandle_t DMX_Output_Task_Handle = NULL;
+TaskHandle_t DMX_Input_Task_Handle = NULL;
+TaskHandle_t Button_Poll_Task_Handle = NULL;
+TaskHandle_t Display_Timeout_Task_Handle = NULL;
+
 void app_main(void)
 {
     vTaskDelay(100);
@@ -24,13 +31,13 @@ void app_main(void)
     setup_display_mutexs();
 
     //TODO: Adjust buffers and priorities 
-    xTaskCreate(dmx_output_task, "dmx_output_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
-    xTaskCreate(dmx_input_task, "dmx_input_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
-    xTaskCreate(button_poll_task, "button_poll_task", 8192, NULL, DMX_OUT_TASK_PRIO, NULL);
-    xTaskCreate(display_timeout_task, "display_timeout_task", DMX_OUT_TASK_STACK_SIZE, NULL, DMX_OUT_TASK_PRIO, NULL);
+    xTaskCreate(dmx_output_task, "dmx_output_task", DMX_OUTPUT_TASK_STACK_SIZE, NULL, DMX_OUTPUT_TASK_PRIO, &DMX_Output_Task_Handle);
+    xTaskCreate(dmx_input_task, "dmx_input_task", DMX_INPUT_TASK_STACK_SIZE, NULL, DMX_INPUT_TASK_PRIO, &DMX_Input_Task_Handle);
+    xTaskCreate(button_poll_task, "button_poll_task", BUTTON_POLL_TASK_STACK_SIZE, NULL, BUTTON_POLL_TASK_PRIO, &Button_Poll_Task_Handle);
+    xTaskCreate(display_timeout_task, "display_timeout_task", DISPLAY_TIMEOUT_TASK_STACK_SIZE, NULL, DISPLAY_TIMEOUT_TASK_PRIO, &Display_Timeout_Task_Handle);
     
-    draw_string(0,0,"1.0",NORMAL_SIZE, WHITE);
     enable_display();
     vTaskDelay(200);
     set_screen(0,0);
 }
+

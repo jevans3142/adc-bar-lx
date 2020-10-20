@@ -5,6 +5,7 @@
 #include "freertos/semphr.h"
 #include "freertos/task.h"
 
+#include "main.h"
 #include "redraw_screen.h"
 #include "screen_driver.h"
 #include "scene_engine.h"
@@ -308,6 +309,7 @@ void redraw_screen(int screen_no)
             {
                 draw_string(0,0,"Main Menu 2/2",NORMAL_SIZE, WHITE);
                 draw_string(8,16,"Lock Controls",NORMAL_SIZE, WHITE);
+                draw_string(8,24,"About",NORMAL_SIZE, WHITE);
                 draw_string(8,8,"}",NORMAL_SIZE, WHITE); //Up arrow 
   
                 draw_string(0,(16+8*(get_screen_selected_value()-5)),"^",NORMAL_SIZE, WHITE); //Menu cursor
@@ -357,7 +359,6 @@ void redraw_screen(int screen_no)
             draw_menu_symbols();
 
             draw_string(0,0,"DMX Mode",NORMAL_SIZE, WHITE);
-
             draw_string(8,12,"Select new",NORMAL_SIZE, WHITE);
             draw_string(8,20,"DMX input mode:",NORMAL_SIZE, WHITE);
 
@@ -373,6 +374,33 @@ void redraw_screen(int screen_no)
             break;
         case SCREEN_LOCK_CTRLS : 
             draw_standard_value_screen("Lock Controls", "Select a lock", "code:");
+            break;
+        case SCREEN_ABOUT :
+            draw_string(120,8,"{",NORMAL_SIZE, WHITE);
+            draw_string(120,34,"}",NORMAL_SIZE, WHITE);
+            draw_string(120,48,"~",NORMAL_SIZE, WHITE);
+            switch (get_screen_selected_value())
+            {
+                case 0 : 
+                    draw_string(0,0,"About 1/2",NORMAL_SIZE, WHITE);
+                    draw_string(8,16,"Software v1.0",NORMAL_SIZE, WHITE);
+                    draw_string(8,32,"Created by",NORMAL_SIZE, WHITE);
+                    draw_string(12,40,"John Evans",NORMAL_SIZE, WHITE);
+                    draw_string(12,48,"john@jhevans.com",NORMAL_SIZE, WHITE);
+                    break;
+                case 1 : 
+                    draw_string(0,0,"About 2/2",NORMAL_SIZE, WHITE);
+                    draw_string(8,16,"StackWMks:",NORMAL_SIZE, WHITE);
+                    sprintf(string_buffer,"DMXO:%u",uxTaskGetStackHighWaterMark(DMX_Output_Task_Handle));
+                    draw_string(12,24,&string_buffer,NORMAL_SIZE, WHITE);
+                    sprintf(string_buffer,"DMXI:%u",uxTaskGetStackHighWaterMark(DMX_Input_Task_Handle));
+                    draw_string(12,32,&string_buffer,NORMAL_SIZE, WHITE);
+                    sprintf(string_buffer,"BtPo:%u",uxTaskGetStackHighWaterMark(Button_Poll_Task_Handle));
+                    draw_string(12,40,&string_buffer,NORMAL_SIZE, WHITE);
+                    sprintf(string_buffer,"DisT:%u",uxTaskGetStackHighWaterMark(Display_Timeout_Task_Handle));
+                    draw_string(12,48,&string_buffer,NORMAL_SIZE, WHITE);
+                    break;
+            }   
             break;
 
         case SCREEN_S2L_MODE : 

@@ -49,7 +49,8 @@ static void menu_button_do(void)
         case SCREEN_FADE_TIME : 
         case SCREEN_S2L_MENU :
         case SCREEN_DMX_MODE : 
-        case SCREEN_LOCK_CTRLS : 
+        case SCREEN_LOCK_CTRLS :
+        case SCREEN_ABOUT : 
             set_screen(SCREEN_MAIN_MENU,get_screen()-10);
             break;
         
@@ -100,6 +101,9 @@ static void set_button_do(void)
                     break;
                 case SCREEN_LOCK_CTRLS :
                     set_screen(SCREEN_LOCK_CTRLS, get_lock_code());
+                    break;
+                case SCREEN_ABOUT :
+                    set_screen(SCREEN_ABOUT, 0);
                     break;
             }
             
@@ -153,9 +157,12 @@ static void set_button_do(void)
             set_screen(SCREEN_MAIN_MENU, SCREEN_DMX_MODE - 10);
             break;
         case SCREEN_LOCK_CTRLS : 
-            //Set the lock code and lock the display 
+            // Set the lock code and lock the display 
             set_lock_code(get_screen_selected_value());
             set_screen(SCREEN_MAIN_STATUS, 0);
+            break;
+        case SCREEN_ABOUT : 
+            // No action
             break;
 
         case SCREEN_S2L_MODE : 
@@ -235,7 +242,7 @@ static void up_button_do(void)
             // No action
             break;
         case SCREEN_MAIN_MENU : 
-            set_screen_selected_value_dec(5,0);
+            set_screen_selected_value_dec(6,0);
             redraw_screen(get_screen());
             break;
         case SCREEN_RECALL_SCENE :
@@ -261,6 +268,10 @@ static void up_button_do(void)
         case SCREEN_LOCK_CTRLS : 
         case SCREEN_UNLOCK_CTRLS :
             set_screen_selected_value_inc(999,1);
+            redraw_screen(get_screen());
+            break;
+        case SCREEN_ABOUT :
+            set_screen_selected_value_inc(1,0);
             redraw_screen(get_screen());
             break;
         case SCREEN_S2L_MODE : 
@@ -293,7 +304,7 @@ static void down_button_do(void)
             // No action
             break;
         case SCREEN_MAIN_MENU :
-            set_screen_selected_value_inc(5,0); //TODO: Replace magic numbers
+            set_screen_selected_value_inc(6,0); //TODO: Replace magic numbers
             redraw_screen(get_screen());
             break;
         case SCREEN_RECALL_SCENE :
@@ -321,7 +332,10 @@ static void down_button_do(void)
             set_screen_selected_value_dec(999,1);
             redraw_screen(get_screen());
             break;
-
+        case SCREEN_ABOUT :
+            set_screen_selected_value_dec(1,0);
+            redraw_screen(get_screen());
+            break;
         case SCREEN_S2L_MODE : 
             set_screen_selected_value_dec(1,0);
             redraw_screen(get_screen());
