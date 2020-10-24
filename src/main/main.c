@@ -25,7 +25,7 @@ TaskHandle_t Display_Timeout_Task_Handle = NULL;
 
 void app_main(void)
 {
-    vTaskDelay(100);
+    vTaskDelay(100); //Pause to allow display to boot properly first
     setup_menu_mutexs();
     setup_scene_engine();
     setup_display_mutexs();
@@ -38,6 +38,6 @@ void app_main(void)
     
     enable_display();
     vTaskDelay(200);
-    set_screen(0,0);
+    set_screen(SCREEN_MAIN_STATUS,0);
 }
 

@@ -389,7 +389,7 @@ void static draw_bytes(uint_fast8_t x, uint_fast8_t y, const uint8_t* data, uint
         {
             // Stretch vertically
             uint16_t w = 0;
-            for (uint_fast8_t bit = 0; bit < 7; bit++)
+            for (uint_fast8_t bit = 0; bit < 8; bit++)
             {
                 if (b & (1 << bit))
                 {
@@ -398,7 +398,7 @@ void static draw_bytes(uint_fast8_t x, uint_fast8_t y, const uint8_t* data, uint
                 }
             }
 
-            // Output 2 times to strech hozizontally            
+            // Output 2 times to stretch horizontally            
             draw_byte(x, y, w & 0xFF, type);
             draw_byte(x, y + 8, (w >> 8), type);
             x++;

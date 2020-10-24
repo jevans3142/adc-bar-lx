@@ -414,7 +414,6 @@ void button_poll_task(void)
     int down_counter = 0;
     int scene_counter = 0; 
 
-
     int menu_state = 0;
     int set_state = 0;
     int up_state = 0;
