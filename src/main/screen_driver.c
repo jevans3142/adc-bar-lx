@@ -438,7 +438,7 @@ void draw_string(uint_fast8_t x, uint_fast8_t y, const char* s, uint_fast8_t sca
         draw_character(x, y, *s, scaling, type);
         if (scaling == DOUBLE_SIZE)
         {
-            x += 12;
+            x += 11;
         }
         else // NORMAL_SIZE
         {

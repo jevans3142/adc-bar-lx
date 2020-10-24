@@ -266,7 +266,7 @@ void redraw_screen(int screen_no)
             sprintf(string_buffer,"%u",get_scene());
             draw_string(8,12,&string_buffer,NORMAL_SIZE, WHITE);
             draw_rect(6,10,14,20, WHITE, LEAVE);
-            draw_string(16,8,scene_names[get_scene()-1],DOUBLE_SIZE, WHITE);
+            draw_string(15,8,scene_names[get_scene()-1],DOUBLE_SIZE, WHITE);
             
             draw_string(70,30,"Audio in",NORMAL_SIZE, WHITE);
             draw_string(12,30,"DMX in",NORMAL_SIZE, WHITE);
