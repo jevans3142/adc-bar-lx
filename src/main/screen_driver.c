@@ -290,6 +290,9 @@ void draw_line(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t type)
     dy = -abs(y2-y1);
     if (y1<y2) { sy = 1; } else { sy = -1; }
     err = dx+dy;  /* error value e_xy */
+
+    draw_pixel(x1,y1,type);
+
     while (true)
     {
         if (x1==x2 && y1==y2) { break; }
