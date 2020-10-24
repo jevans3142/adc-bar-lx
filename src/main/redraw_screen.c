@@ -299,7 +299,7 @@ void redraw_screen(int screen_no)
                 draw_string(8,16,"Recall Scene",NORMAL_SIZE, WHITE);
                 draw_string(8,24,"Record Scene",NORMAL_SIZE, WHITE);
                 draw_string(8,32,"Fade Time",NORMAL_SIZE, WHITE);
-                draw_string(8,40,"Sound To Light...",NORMAL_SIZE, WHITE);
+                draw_string(8,40,"Sound to Light...",NORMAL_SIZE, WHITE);
                 draw_string(8,48,"DMX Input Mode",NORMAL_SIZE, WHITE);
                 draw_string(8,56,"~",NORMAL_SIZE, WHITE); //Down arrow
                 
@@ -320,16 +320,28 @@ void redraw_screen(int screen_no)
         case SCREEN_S2L_MENU :
             draw_menu_symbols();
 
-            draw_string(0,0,"Sound To Light Menu",NORMAL_SIZE, WHITE);
+            if (get_screen_selected_value()<5) 
+            {
+                draw_string(0,0,"Sound to Light 1/2",NORMAL_SIZE, WHITE);
+                draw_string(8,16,"Mode",NORMAL_SIZE, WHITE);
+                draw_string(8,24,"Scene Enable",NORMAL_SIZE, WHITE);
+                draw_string(8,32,"High Channel",NORMAL_SIZE, WHITE);
+                draw_string(8,40,"Mid-High Channel",NORMAL_SIZE, WHITE);
+                draw_string(8,48,"Mid-Low Channel",NORMAL_SIZE, WHITE);
+                draw_string(8,56,"~",NORMAL_SIZE, WHITE); //Down arrow
+                
+                draw_string(0,(16+8*get_screen_selected_value()),"^",NORMAL_SIZE, WHITE); //Menu cursor
+            }
+            else
+            {
+                draw_string(0,0,"Sound to Light 2/2",NORMAL_SIZE, WHITE);
+                draw_string(8,16,"Low Channel",NORMAL_SIZE, WHITE);
+                draw_string(8,8,"}",NORMAL_SIZE, WHITE); //Up arrow 
+  
+                draw_string(0,(16+8*(get_screen_selected_value()-5)),"^",NORMAL_SIZE, WHITE); //Menu cursor
+            }
 
-            draw_string(8,16,"Mode",NORMAL_SIZE, WHITE);
-            draw_string(8,24,"High Channel",NORMAL_SIZE, WHITE);
-            draw_string(8,32,"Mid-High Channel",NORMAL_SIZE, WHITE);
-            draw_string(8,40,"Mid-Low Channel",NORMAL_SIZE, WHITE);
-            draw_string(8,48,"Low Channel",NORMAL_SIZE, WHITE);
 
-            //Actually the menu position cursor
-            draw_string(0,(16+8*get_screen_selected_value()),"^",NORMAL_SIZE, WHITE);
             break;
 
 
@@ -408,8 +420,8 @@ void redraw_screen(int screen_no)
 
             draw_string(0,0,"S2L Mode",NORMAL_SIZE, WHITE);
 
-            draw_string(8,12,"Select new",NORMAL_SIZE, WHITE);
-            draw_string(8,20,"Sound-to-light mode:",NORMAL_SIZE, WHITE);
+            draw_string(8,12,"Select sound-",NORMAL_SIZE, WHITE);
+            draw_string(8,20,"to-light mode:",NORMAL_SIZE, WHITE);
 
             switch (get_screen_selected_value())
             {
@@ -418,6 +430,26 @@ void redraw_screen(int screen_no)
                     break;
                 case S2L_MODE_PULSE : 
                     draw_string(16,32,"Pulse",DOUBLE_SIZE, BLACK); 
+                    break;
+            }
+            break;
+        case SCREEN_S2L_ENABLE :
+            draw_menu_symbols();
+
+            draw_string(0,0,"S2L Enable",NORMAL_SIZE, WHITE);
+
+            draw_string(8,12,"Enable sound-to",NORMAL_SIZE, WHITE);
+            draw_string(8,20,"light on scenes:",NORMAL_SIZE, WHITE);
+
+            draw_string(48,36,scene_names[get_screen_selected_value()-1],NORMAL_SIZE, WHITE);
+          
+            switch (get_scene_engine_settings().s2l_enable[get_screen_selected_value()-1])
+            {
+                case pdTRUE :
+                    draw_string(8,32,"On",DOUBLE_SIZE, BLACK); 
+                    break;
+                case pdFALSE : 
+                    draw_string(8,32,"Off",DOUBLE_SIZE, BLACK); 
                     break;
             }
             break;

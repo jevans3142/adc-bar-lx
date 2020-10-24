@@ -55,6 +55,7 @@ static void menu_button_do(void)
             break;
         
         case SCREEN_S2L_MODE :
+        case SCREEN_S2L_ENABLE :
         case SCREEN_S2L_H_CH : 
         case SCREEN_S2L_MH_CH : 
         case SCREEN_S2L_ML_CH : 
@@ -133,6 +134,9 @@ static void set_button_do(void)
                 case SCREEN_S2L_MODE :
                     set_screen(SCREEN_S2L_MODE, get_scene_engine_settings().s2l_mode);
                     break;
+                case SCREEN_S2L_ENABLE :
+                    set_screen(SCREEN_S2L_ENABLE, 1);
+                    break;
                 case SCREEN_S2L_H_CH :
                     set_screen(SCREEN_S2L_H_CH, get_scene_engine_settings().sel_high_ch);
                     break;
@@ -171,6 +175,13 @@ static void set_button_do(void)
             Scene_Engine_Settings_temp.s2l_mode = get_screen_selected_value();
             set_scene_engine_settings(Scene_Engine_Settings_temp);
             set_screen(SCREEN_S2L_MENU, SCREEN_S2L_MODE - 20);
+            break;
+        case SCREEN_S2L_ENABLE :
+            // Toggle sound to light enable on the currently selected scene
+            Scene_Engine_Settings_temp = get_scene_engine_settings();
+            Scene_Engine_Settings_temp.s2l_enable[get_screen_selected_value()-1] ^= 1;
+            set_scene_engine_settings(Scene_Engine_Settings_temp);
+            redraw_screen(get_screen());
             break;
         case SCREEN_S2L_H_CH :
             // Set the sound to light high channel
@@ -258,7 +269,7 @@ static void up_button_do(void)
             redraw_screen(get_screen());
             break;
         case SCREEN_S2L_MENU : 
-            set_screen_selected_value_dec(4,0);
+            set_screen_selected_value_dec(5,0);
             redraw_screen(get_screen());
             break;
         case SCREEN_DMX_MODE : 
@@ -276,6 +287,10 @@ static void up_button_do(void)
             break;
         case SCREEN_S2L_MODE : 
             set_screen_selected_value_inc(1,0);
+            redraw_screen(get_screen());
+            break;
+        case SCREEN_S2L_ENABLE :
+            set_screen_selected_value_inc(7,1);
             redraw_screen(get_screen());
             break;
         case SCREEN_S2L_H_CH :
@@ -320,7 +335,7 @@ static void down_button_do(void)
             redraw_screen(get_screen());
             break;
         case SCREEN_S2L_MENU :
-            set_screen_selected_value_inc(4,0);
+            set_screen_selected_value_inc(5,0);
             redraw_screen(get_screen());
             break;
         case SCREEN_DMX_MODE : 
@@ -338,6 +353,10 @@ static void down_button_do(void)
             break;
         case SCREEN_S2L_MODE : 
             set_screen_selected_value_dec(1,0);
+            redraw_screen(get_screen());
+            break;
+        case SCREEN_S2L_ENABLE :
+            set_screen_selected_value_dec(7,1);
             redraw_screen(get_screen());
             break;
         case SCREEN_S2L_H_CH :
