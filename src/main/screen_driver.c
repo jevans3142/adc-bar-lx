@@ -315,15 +315,15 @@ void draw_rect(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t outline,
 {
     int16_t sx, sy, x, y;
 
-    if (x1<x2) { sx = 1; } else { sx = -1; }
-    if (y1<y2) { sy = 1; } else { sy = -1; }
+    if (x1<=x2) { sx = 1; } else { sx = -1; }
+    if (y1<=y2) { sy = 1; } else { sy = -1; }
     
     draw_line(x1,y1,x1,y2,outline);
     draw_line(x1,y1,x2,y1,outline);
     draw_line(x2,y2,x1,y2,outline);
     draw_line(x2,y2,x2,y1,outline);
 
-    if (fill != LEAVE)
+    if ((fill != LEAVE) && ( x1 != x2) && (y1 != y2 ))
     {
         for ( x = x1 + sx; x != x2; x=x+sx) 
         {
