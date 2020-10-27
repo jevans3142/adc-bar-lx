@@ -4,6 +4,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
 #include "freertos/task.h"
+#include "driver/adc.h"
 
 #include "main.h"
 #include "redraw_screen.h"
@@ -254,6 +255,39 @@ int get_lock_code(void)
 
 //========================
 
+
+void s2l_meter_refresh_task(void)
+{
+    int rawval; 
+    while(1)
+    {
+        if (get_display_active_status() == 1)
+        {
+            if (get_screen() == SCREEN_MAIN_STATUS)
+            {
+                draw_rect(71,37,114,40, BLACK, BLACK);
+                draw_rect(71,44,114,47, BLACK, BLACK);
+                draw_rect(71,51,114,54, BLACK, BLACK);
+                draw_rect(71,58,114,61, BLACK, BLACK);
+        
+                rawval = adc1_get_raw(ADC1_CHANNEL_4);
+                draw_rect(70,37,(uint8_t) ((((float)rawval/(float)4096)*44)+70),40, WHITE, WHITE);
+                rawval = adc1_get_raw(ADC1_CHANNEL_7);
+                draw_rect(70,44,(uint8_t) ((((float)rawval/(float)4096)*44)+70),47, WHITE, WHITE);
+                rawval = adc1_get_raw(ADC1_CHANNEL_6);
+                draw_rect(70,51,(uint8_t) ((((float)rawval/(float)4096)*44)+70),54, WHITE, WHITE);
+                rawval = adc1_get_raw(ADC1_CHANNEL_3);
+                draw_rect(70,58,(uint8_t) ((((float)rawval/(float)4096)*44)+70),61, WHITE, WHITE);
+                refresh_display();
+            }
+        }
+        vTaskDelay(S2L_REFRESH_INTERVAL_MS);  
+    }        
+}
+
+//========================
+
+
 void redraw_screen(int screen_no)
 {
     clear_display();
@@ -261,15 +295,15 @@ void redraw_screen(int screen_no)
     switch (screen_no)
     {
         case SCREEN_MAIN_STATUS :
-            draw_line(0,28,128,28, WHITE);
-            draw_line(64,28,64,64, WHITE);
+            draw_line(0,22,128,22, WHITE);
+            draw_line(64,22,64,64, WHITE);
             sprintf(string_buffer,"%u",get_scene());
-            draw_string(5,12,&string_buffer,NORMAL_SIZE, WHITE);
-            draw_rect(2,10,13,20, WHITE, LEAVE);
-            draw_string(15,8,scene_names[get_scene()-1],DOUBLE_SIZE, WHITE);
+            draw_string(5,6,&string_buffer,NORMAL_SIZE, WHITE);
+            draw_rect(2,4,13,14, WHITE, LEAVE);
+            draw_string(15,2,scene_names[get_scene()-1],DOUBLE_SIZE, WHITE);
             
-            draw_string(70,30,"Audio in",NORMAL_SIZE, WHITE);
-            draw_string(12,30,"DMX in",NORMAL_SIZE, WHITE);
+            draw_string(70,26,"Audio in",NORMAL_SIZE, WHITE);
+            draw_string(12,26,"DMX in",NORMAL_SIZE, WHITE);
             switch (get_scene_engine_settings().dmx_input_mode)
             {
                 case DMX_MODE_OFF :
@@ -288,6 +322,12 @@ void redraw_screen(int screen_no)
             {
                 draw_string(120,8,"{",NORMAL_SIZE, WHITE); // Actually the menu icon
             }
+
+            draw_rect(70,36,115,41, WHITE, LEAVE);
+            draw_rect(70,43,115,48, WHITE, LEAVE);
+            draw_rect(70,50,115,55, WHITE, LEAVE);
+            draw_rect(70,57,115,62, WHITE, LEAVE);
+
             break;  
 
         case SCREEN_MAIN_MENU :
@@ -402,15 +442,17 @@ void redraw_screen(int screen_no)
                     break;
                 case 1 : 
                     draw_string(0,0,"About 2/2",NORMAL_SIZE, WHITE);
-                    draw_string(8,16,"StackWMks:",NORMAL_SIZE, WHITE);
+                    draw_string(0,16,"StackWMks:",NORMAL_SIZE, WHITE);
                     sprintf(string_buffer,"DMXO:%u",uxTaskGetStackHighWaterMark(DMX_Output_Task_Handle));
-                    draw_string(12,24,&string_buffer,NORMAL_SIZE, WHITE);
+                    draw_string(0,24,&string_buffer,NORMAL_SIZE, WHITE);
                     sprintf(string_buffer,"DMXI:%u",uxTaskGetStackHighWaterMark(DMX_Input_Task_Handle));
-                    draw_string(12,32,&string_buffer,NORMAL_SIZE, WHITE);
+                    draw_string(0,32,&string_buffer,NORMAL_SIZE, WHITE);
                     sprintf(string_buffer,"BtPo:%u",uxTaskGetStackHighWaterMark(Button_Poll_Task_Handle));
-                    draw_string(12,40,&string_buffer,NORMAL_SIZE, WHITE);
+                    draw_string(0,40,&string_buffer,NORMAL_SIZE, WHITE);
                     sprintf(string_buffer,"DisT:%u",uxTaskGetStackHighWaterMark(Display_Timeout_Task_Handle));
-                    draw_string(12,48,&string_buffer,NORMAL_SIZE, WHITE);
+                    draw_string(0,48,&string_buffer,NORMAL_SIZE, WHITE);
+                    sprintf(string_buffer,"S2LR:%u",uxTaskGetStackHighWaterMark(S2l_Meter_Refresh_Handle));
+                    draw_string(64,48,&string_buffer,NORMAL_SIZE, WHITE);
                     break;
             }   
             break;

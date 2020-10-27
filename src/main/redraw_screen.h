@@ -6,6 +6,8 @@
 
 #define DISPLAY_ACTIVE_INTERVAL_MS ( 1000 / portTICK_PERIOD_MS)
 
+#define S2L_REFRESH_INTERVAL_MS ( 100 / portTICK_PERIOD_MS)
+
 #define MAX_STRING_LENGTH 20
 
 //Define screen IDs 
@@ -49,6 +51,8 @@ int get_screen_selected_value(void);
 
 void set_lock_code(int new_lock_code);
 int get_lock_code(void);
+
+void s2l_meter_refresh_task(void);
 
 void redraw_screen(int screen_no);
 

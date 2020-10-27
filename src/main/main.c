@@ -22,6 +22,7 @@ TaskHandle_t DMX_Output_Task_Handle = NULL;
 TaskHandle_t DMX_Input_Task_Handle = NULL;
 TaskHandle_t Button_Poll_Task_Handle = NULL;
 TaskHandle_t Display_Timeout_Task_Handle = NULL;
+TaskHandle_t S2l_Meter_Refresh_Handle = NULL;
 
 void app_main(void)
 {
@@ -39,5 +40,6 @@ void app_main(void)
     enable_display();
     vTaskDelay(200);
     set_screen(SCREEN_MAIN_STATUS,0);
+    xTaskCreate(s2l_meter_refresh_task, "s2l_meter_refresh_task", S2L_METER_REFRESH_TASK_STACK_SIZE, NULL, S2L_METER_REFRESH_TASK_PRIO, &S2l_Meter_Refresh_Handle);
 }
 
