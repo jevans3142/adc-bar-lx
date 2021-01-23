@@ -79,9 +79,9 @@ void dmx_output_task(void)
         scene_calc_task(data);
 
         //Send DMX start-of-frame signal 
-        uart_set_line_inverse(uart_num,UART_INVERSE_TXD);
+        uart_set_line_inverse(uart_num,UART_SIGNAL_TXD_INV);
         delay_microseconds(DMX_OUT_START_BREAK_US);
-        uart_set_line_inverse(uart_num,UART_INVERSE_DISABLE);
+        uart_set_line_inverse(uart_num,UART_SIGNAL_INV_DISABLE);
         delay_microseconds(DMX_OUT_MARK_AFTER_BREAK );
 
         uart_write_bytes(uart_num, (const char*)data,513);
