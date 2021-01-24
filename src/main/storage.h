@@ -9,9 +9,9 @@
 #define PIN_SD_MOSI 23 
 #define PIN_SD_CLK  18
 #define PIN_SD_CS   5 
-
-void write_scene(int scene_number, uint8_t* scene_data);
-int read_scene(int scene_number, uint8_t* scene_data);
+void init_sd_spi(void);
+void write_scene(uint8_t scene_number, uint8_t* scene_data);
+uint8_t read_scene(uint8_t scene_number, uint8_t* scene_data);
 void write_settings(struct Scene_Engine_Settings_Struct input);
 struct Scene_Engine_Settings_Struct read_settings(void);
 

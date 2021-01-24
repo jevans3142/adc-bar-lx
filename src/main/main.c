@@ -17,6 +17,7 @@
 #include "button_polling.h"
 #include "redraw_screen.h"
 #include "scene_engine.h"
+#include "storage.h"
 
 TaskHandle_t DMX_Output_Task_Handle = NULL;
 TaskHandle_t DMX_Input_Task_Handle = NULL;
@@ -27,6 +28,7 @@ TaskHandle_t S2l_Meter_Refresh_Handle = NULL;
 void app_main(void)
 {
     vTaskDelay(100); //Pause to allow display to boot properly first
+    init_sd_spi();
     setup_menu_mutexs();
     setup_scene_engine();
     setup_display_mutexs();

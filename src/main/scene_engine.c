@@ -99,7 +99,14 @@ void setup_scene_engine(void)
     adc1_config_channel_atten(ADC1_CHANNEL_6,ADC_ATTEN_DB_11);
     adc1_config_channel_atten(ADC1_CHANNEL_3,ADC_ATTEN_DB_11);
 
-    set_scene_engine_settings(read_settings());
+    if( Scene_Engine_Settings_Mutex != NULL )
+    {
+        if( xSemaphoreTake( Scene_Engine_Settings_Mutex, ( TickType_t ) 10 ) == pdTRUE )
+        {
+            Scene_Engine_Settings = read_settings();
+            xSemaphoreGive( Scene_Engine_Settings_Mutex );
+        }
+    }
     
     //Read in scenes from SD card
     if( DMX_Buffer_Mutex != NULL )
