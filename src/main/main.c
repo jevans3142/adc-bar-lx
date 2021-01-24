@@ -34,14 +34,14 @@ void app_main(void)
     setup_display_mutexs();
 
     //TODO: Adjust buffers and priorities 
-    xTaskCreate(dmx_output_task, "dmx_output_task", DMX_OUTPUT_TASK_STACK_SIZE, NULL, DMX_OUTPUT_TASK_PRIO, &DMX_Output_Task_Handle);
-    xTaskCreate(dmx_input_task, "dmx_input_task", DMX_INPUT_TASK_STACK_SIZE, NULL, DMX_INPUT_TASK_PRIO, &DMX_Input_Task_Handle);
-    xTaskCreate(button_poll_task, "button_poll_task", BUTTON_POLL_TASK_STACK_SIZE, NULL, BUTTON_POLL_TASK_PRIO, &Button_Poll_Task_Handle);
-    xTaskCreate(display_timeout_task, "display_timeout_task", DISPLAY_TIMEOUT_TASK_STACK_SIZE, NULL, DISPLAY_TIMEOUT_TASK_PRIO, &Display_Timeout_Task_Handle);
+    xTaskCreate( (TaskFunction_t) dmx_output_task, "dmx_output_task", DMX_OUTPUT_TASK_STACK_SIZE, NULL, DMX_OUTPUT_TASK_PRIO, &DMX_Output_Task_Handle);
+    xTaskCreate( (TaskFunction_t) dmx_input_task, "dmx_input_task", DMX_INPUT_TASK_STACK_SIZE, NULL, DMX_INPUT_TASK_PRIO, &DMX_Input_Task_Handle);
+    xTaskCreate( (TaskFunction_t) button_poll_task, "button_poll_task", BUTTON_POLL_TASK_STACK_SIZE, NULL, BUTTON_POLL_TASK_PRIO, &Button_Poll_Task_Handle);
+    xTaskCreate( (TaskFunction_t) display_timeout_task, "display_timeout_task", DISPLAY_TIMEOUT_TASK_STACK_SIZE, NULL, DISPLAY_TIMEOUT_TASK_PRIO, &Display_Timeout_Task_Handle);
     
     enable_display();
     vTaskDelay(200);
     set_screen(SCREEN_MAIN_STATUS,0);
-    xTaskCreate(s2l_meter_refresh_task, "s2l_meter_refresh_task", S2L_METER_REFRESH_TASK_STACK_SIZE, NULL, S2L_METER_REFRESH_TASK_PRIO, &S2l_Meter_Refresh_Handle);
+    xTaskCreate( (TaskFunction_t) s2l_meter_refresh_task, "s2l_meter_refresh_task", S2L_METER_REFRESH_TASK_STACK_SIZE, NULL, S2L_METER_REFRESH_TASK_PRIO, &S2l_Meter_Refresh_Handle);
 }
 

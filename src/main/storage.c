@@ -27,7 +27,7 @@ void init_sd_spi(void) {
         .sclk_io_num = PIN_SD_CLK
     };
 
-    esp_err_t ret = spi_bus_initialize(VSPI_HOST, &spi_bus_config, 1);
+    spi_bus_initialize(VSPI_HOST, &spi_bus_config, 1);
 }
 
 static void init_sd_card()

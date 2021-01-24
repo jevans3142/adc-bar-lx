@@ -231,7 +231,7 @@ static void set_button_do(void)
                 // No - display an X for a few seconds
                 draw_string(70,32,"X",DOUBLE_SIZE, WHITE);
                 refresh_display();
-                xTaskCreate(special_msg_pop_task, "special_msg_pop_task", 2048, NULL, 5, NULL);
+                xTaskCreate( (TaskFunction_t) special_msg_pop_task, "special_msg_pop_task", 2048, NULL, 5, NULL);
             }
             break;
     }
@@ -461,7 +461,7 @@ void button_poll_task(void)
                     //Record special scene
                     scene_state = 0;
                     record_scene(6);
-                    xTaskCreate(special_flash_task, "special_flash_task", 2048, NULL, 5, NULL);
+                    xTaskCreate( (TaskFunction_t) special_flash_task, "special_flash_task", 2048, NULL, 5, NULL);
                 }
                 else 
                 {
