@@ -6,6 +6,9 @@
 #include "driver/adc.h"
 #include "freertos/semphr.h"
 #include "freertos/task.h"
+#include "esp_err.h"
+#include "esp_log.h"
+
 
 #include "scene_engine.h"
 #include "storage.h"
@@ -28,6 +31,7 @@ uint8_t current_state[513] = {};
 uint8_t dmx_in_buffer[513] = {};
 uint8_t scenes[NUMBER_OF_SCENES][513] = {};
 
+static const char *TAG = "screen_engine";
 
 static unsigned long IRAM_ATTR millis()
 {
@@ -166,6 +170,7 @@ int get_scene(void)
             return returnval;
         }
     }
+    ESP_LOGW(TAG,"Get scene getter func fail");
     return NULL;
 }
 
@@ -200,11 +205,15 @@ struct Scene_Engine_Settings_Struct get_scene_engine_settings(void)
 void scene_calc_task(uint8_t* output)
 {   
     int rawval = 0;
+    uint8_t temp_scene_no;
+
+    temp_scene_no = get_scene();
+
     struct Scene_Engine_Settings_Struct Scene_Engine_Settings_temp;
 
-    if( (Scene_No_Mutex != NULL) && (DMX_Buffer_Mutex != NULL) )
+    if (DMX_Buffer_Mutex != NULL)
     {
-        if( (xSemaphoreTake( Scene_No_Mutex, ( TickType_t ) 10 ) == pdTRUE) && (xSemaphoreTake( DMX_Buffer_Mutex, ( TickType_t ) 10 ) == pdTRUE) )
+        if (xSemaphoreTake( DMX_Buffer_Mutex, ( TickType_t ) 10 ) == pdTRUE)
         {
             // Read a copy of the current scene settings
             Scene_Engine_Settings_temp = get_scene_engine_settings();
@@ -221,7 +230,7 @@ void scene_calc_task(uint8_t* output)
                 {
                     // Then we're still in the middle of the fade
                     fade_proportion = ((float)(current_fade_timeout-millis()))/((float)(1000*Scene_Engine_Settings_temp.fade_time));
-                    proportion_513(last_fade_state, scenes[Scene_No-1], current_state, fade_proportion);
+                    proportion_513(last_fade_state, scenes[temp_scene_no-1], current_state, fade_proportion);
                 }
             }
             if (Scene_State == SCENE_STATE_STATIC)
@@ -237,7 +246,7 @@ void scene_calc_task(uint8_t* output)
             }
 
             //TODO: Make this work with fading?
-            if((Scene_Engine_Settings_temp.s2l_enable[Scene_No-1]==pdTRUE) && (Scene_Engine_Settings_temp.s2l_mode == S2L_MODE_PULSE))
+            if((Scene_Engine_Settings_temp.s2l_enable[temp_scene_no-1]==pdTRUE) && (Scene_Engine_Settings_temp.s2l_mode == S2L_MODE_PULSE))
             {
                 // Sound to light is active on this scene
                 rawval = adc1_get_raw(ADC1_CHANNEL_3);
@@ -264,7 +273,6 @@ void scene_calc_task(uint8_t* output)
                     current_state[Scene_Engine_Settings_temp.sel_high_ch] = (uint8_t) (((float)rawval/(float)4096)*255);
                 }
             }
-            xSemaphoreGive( Scene_No_Mutex );
             current_state[0]=0x00; // Force the DMX start code to be 0x00 for 'dimmer data'
             copy_513(current_state,output);
             xSemaphoreGive( DMX_Buffer_Mutex );

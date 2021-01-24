@@ -92,7 +92,7 @@ void write_scene(uint8_t scene_number, uint8_t* scene_data)
 {
     init_sd_card();
 
-    ESP_LOGI(TAG, "Opening scene file for write");
+    ESP_LOGI(TAG, "Opening scene %i file for write",scene_number);
     char filename[sizeof "/sdcard/000.scn"];
     sprintf(filename, "/sdcard/%03u.scn",scene_number); 
     FILE* f = fopen(filename, "w");
@@ -117,7 +117,7 @@ uint8_t read_scene(uint8_t scene_number, uint8_t* scene_data)
 {
     init_sd_card();
 
-    ESP_LOGI(TAG, "Opening scene file for read");
+    ESP_LOGI(TAG, "Opening scene %i file for read",scene_number);
     char filename[sizeof "/sdcard/000.scn"];
     sprintf(filename, "/sdcard/%03u.scn",scene_number); 
     FILE* f = fopen(filename, "r");
@@ -183,9 +183,9 @@ struct Scene_Engine_Settings_Struct read_settings()
         temp.dmx_input_mode = 1;
         temp.s2l_mode = 0;
         temp.sel_low_ch = 1;
-        temp.sel_midlow_ch = 1;
-        temp.sel_midhigh_ch = 1;
-        temp.sel_high_ch = 1;
+        temp.sel_midlow_ch = 2;
+        temp.sel_midhigh_ch = 3;
+        temp.sel_high_ch = 4;
 
         return temp;
     }
