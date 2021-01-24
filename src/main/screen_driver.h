@@ -37,9 +37,9 @@ void enable_display(void);
 void reenable_display(void);
 void disable_display(void);
 void clear_display(void);
-void draw_pixel(int16_t x, int16_t y, uint16_t type);
-void draw_line(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t type);
-void draw_rect(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t outline, uint16_t fill);
-void draw_string(uint_fast8_t x, uint_fast8_t y, const char* s, uint_fast8_t scaling, uint_fast8_t type);
+void draw_pixel(uint8_t x, uint8_t y, uint8_t type);
+void draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t type);
+void draw_rect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t outline, uint8_t fill);
+void draw_string(uint8_t x, uint8_t y, const char* s, uint8_t scaling, uint8_t type);
 
-#endif  
+#endif

@@ -34,7 +34,9 @@ static void IRAM_ATTR delay_microseconds(uint32_t us)
     if(us)
     {
         uint32_t e = (m + us);
-        if(m > e){ //overflow
+        if(m > e)
+        { 
+            //overflow
             while(micros() > e)
             {
                 NOP();
