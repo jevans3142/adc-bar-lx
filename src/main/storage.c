@@ -34,15 +34,10 @@ static void init_sd_card()
 {
     ESP_LOGI(TAG, "Initializing SD card");
 
-    //init_sd_spi();
-
     sdmmc_host_t host = SDSPI_HOST_DEFAULT();
     sdspi_device_config_t slot_config = SDSPI_DEVICE_CONFIG_DEFAULT();
     host.slot = VSPI_HOST;
     slot_config.host_id=VSPI_HOST;
-    //slot_config.gpio_miso = PIN_SD_MISO;
-    //slot_config.gpio_mosi = PIN_SD_MOSI;
-    //slot_config.gpio_sck  = PIN_SD_CLK;
     slot_config.gpio_cs   = PIN_SD_CS;
 
     esp_vfs_fat_sdmmc_mount_config_t mount_config = {
@@ -62,7 +57,6 @@ static void init_sd_card()
         return;
     }
 
-    //sdmmc_card_print_info(stdout, card);
 }
 
 static void deinit_sd_card(void)
@@ -76,15 +70,7 @@ static void deinit_sd_card(void)
         }
         return;
     }
-    //ret = spi_bus_free(VSPI_HOST);
-    //if (ret != ESP_OK) {
-    //    if (ret == ESP_ERR_INVALID_ARG) {
-    //        ESP_LOGE(TAG, "Failed to free SD SPI bus - invalid param");
-    //    } else {
-    //        ESP_LOGE(TAG, "Failed to free SD SPI bus - not all devices free");
-    //    }
-    //    return;
-    //}
+
     ESP_LOGI(TAG, "Card unmounted");
 }
 
