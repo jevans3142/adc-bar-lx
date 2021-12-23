@@ -40,6 +40,6 @@ void clear_display(void);
 void draw_pixel(uint8_t x, uint8_t y, uint8_t type);
 void draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t type);
 void draw_rect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t outline, uint8_t fill);
-void draw_string(uint8_t x, uint8_t y, const char* s, uint8_t scaling, uint8_t type);
+void draw_string(uint8_t x, uint8_t y, char* s, uint8_t scaling, uint8_t type);
 
 #endif

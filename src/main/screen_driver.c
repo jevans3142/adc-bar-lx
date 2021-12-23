@@ -438,7 +438,7 @@ void static draw_character(uint8_t x, uint8_t y, char c, uint8_t scaling, uint8_
     draw_bytes(x, y, &oled_font6x8[font_index], 6, scaling, type);
 }
 
-void draw_string(uint8_t x, uint8_t y, const char* s, uint8_t scaling, uint8_t type)
+void draw_string(uint8_t x, uint8_t y, char* s, uint8_t scaling, uint8_t type)
 {   
     ESP_LOGI(TAG,"Draw string: %s",s);
     while (*s)
