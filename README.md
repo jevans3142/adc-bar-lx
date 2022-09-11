@@ -4,4 +4,4 @@ This repository hosts the software and hardware design for the ADC Theatre's new
 
 # Build
 
-Using esp-idf FreeRTOS toolchain, currently building on the 'latest' branch ie. v4.0 or above - default build settings. 
+Using esp-idf FreeRTOS toolchain, currently building v4.4.2 as a stable version with the configuration included in the src folder (ie. when building do not run the idf.py set-target esp32 command as directed in the esp-idf Getting Started instructions to set up the default build config)
