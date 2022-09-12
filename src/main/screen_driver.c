@@ -131,6 +131,7 @@ static esp_err_t i2c_init(void)
     conf.scl_io_num = PIN_I2C_SCL;
     conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
     conf.master.clk_speed = I2C_FREQ;
+    conf.clk_flags = 0;
     i2c_param_config(i2c_master_port, &conf);
     return i2c_driver_install(i2c_master_port, conf.mode, I2C_RX_BUFFER, I2C_TX_BUFFER, 0);
 }
