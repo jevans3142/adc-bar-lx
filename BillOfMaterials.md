@@ -25,7 +25,7 @@ Unit is a 1U rackmount case with various PCBs inside, connectors on rear, displa
 1x Control panel for remote control of scene states - technically this is optional
 ### PCB 
 |References|Item                              |Package           |Quantity|Value           |Supplier and ref|
-|----------|----------------------------------|------------------|--------|--ø--------------|----------------|
+|----------|----------------------------------|------------------|--------|----------------|----------------|
 |J1        |8P8C connector                    |                  |1       |8P8C            |RS 331-6443     |
 |SW1-SW7   |4 pin 2.54mm pitch keyed connector|2.54mm pitch      |7       |Molex KK254 1x04|RS 792-2881     |
 |Q1-Q7     |NPN transistor - KSP43BU          |TO-92             |7       |                |RS 806-4620     |
