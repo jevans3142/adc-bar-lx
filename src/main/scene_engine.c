@@ -6,6 +6,7 @@
 #include "driver/adc.h"
 #include "freertos/semphr.h"
 #include "freertos/task.h"
+#include "esp_timer.h"
 #include "esp_err.h"
 #include "esp_log.h"
 
@@ -83,7 +84,7 @@ void setup_scene_engine(void)
 
     //Set up GPIO for remote panel LEDs and buttons
     gpio_config_t io_conf;
-    io_conf.intr_type = GPIO_PIN_INTR_DISABLE;
+    io_conf.intr_type = GPIO_INTR_DISABLE;
     io_conf.mode = GPIO_MODE_OUTPUT;
     io_conf.pin_bit_mask = PIN_SCENE_LEDS_MASK;
     io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;

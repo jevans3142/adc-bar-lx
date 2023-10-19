@@ -15,7 +15,7 @@ This repository hosts the software and hardware design for the [ADC Theatre's](h
 
 ## Build
 
-The microcontroller used is an ESP32. After standard installation of the esp-idf FreeRTOS toolchain, currently building on v4.4.2 as a stable version with the configuration included in the src folder (ie. when building do not run the idf.py set-target esp32 command as directed in the esp-idf Getting Started instructions to set up the default build config - just go straight to idf.py build)
+The microcontroller used is an ESP32. After standard installation of the esp-idf FreeRTOS toolchain, currently building on v5.1.1 as a stable version with the configuration included in the src folder (ie. when building do not run the idf.py set-target esp32 command as directed in the esp-idf Getting Started instructions to set up the default build config - just go straight to idf.py build)
 
 ## Hardware
 

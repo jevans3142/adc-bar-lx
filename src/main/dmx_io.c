@@ -5,6 +5,7 @@
 
 #include "dmx_io.h"
 #include "scene_engine.h"
+#include "esp_timer.h"
 
 #include "esp_err.h"
 #include "esp_log.h"

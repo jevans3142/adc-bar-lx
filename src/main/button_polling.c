@@ -417,7 +417,7 @@ static void button_debounce(int button_pin, int* state, int* counter, void (*but
 void button_poll_task(void)
 {
     gpio_config_t io_conf;
-    io_conf.intr_type = GPIO_PIN_INTR_DISABLE;
+    io_conf.intr_type = GPIO_INTR_DISABLE;
     io_conf.mode = GPIO_MODE_INPUT;
     io_conf.pin_bit_mask = PIN_MENU_BUTTONS_MASK;
     io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
