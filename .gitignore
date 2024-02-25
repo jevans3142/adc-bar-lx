@@ -1,2 +1,6 @@
 #Ignore output build files
 /src/build
+# Ignore VS code files
+settings.json
+# Ignore macOS thumbnails
+.DS_Store

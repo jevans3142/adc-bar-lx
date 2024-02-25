@@ -3,7 +3,7 @@
 
 //Task setup
 
-#define DMX_OUTPUT_TASK_STACK_SIZE    2048
+#define DMX_OUTPUT_TASK_STACK_SIZE    4096
 #define DMX_OUTPUT_TASK_PRIO          10
 
 #define DMX_INPUT_TASK_STACK_SIZE    2048

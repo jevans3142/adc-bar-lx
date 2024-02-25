@@ -341,7 +341,7 @@ void redraw_screen(int screen_no)
                 draw_string(8,24,"Record Scene",NORMAL_SIZE, WHITE);
                 draw_string(8,32,"Fade Time",NORMAL_SIZE, WHITE);
                 draw_string(8,40,"Sound to Light...",NORMAL_SIZE, WHITE);
-                draw_string(8,48,"DMX Input Mode",NORMAL_SIZE, WHITE);
+                draw_string(8,48,"Colourfade...",NORMAL_SIZE, WHITE);
                 draw_string(8,56,"~",NORMAL_SIZE, WHITE); //Down arrow
                 
                 draw_string(0,(16+8*get_screen_selected_value()),"^",NORMAL_SIZE, WHITE); //Menu cursor
@@ -349,8 +349,9 @@ void redraw_screen(int screen_no)
             else
             {
                 draw_string(0,0,"Main Menu 2/2",NORMAL_SIZE, WHITE);
-                draw_string(8,16,"Lock Controls",NORMAL_SIZE, WHITE);
-                draw_string(8,24,"About",NORMAL_SIZE, WHITE);
+                draw_string(8,16,"DMX Input Mode",NORMAL_SIZE, WHITE);
+                draw_string(8,24,"Lock Controls",NORMAL_SIZE, WHITE);
+                draw_string(8,32,"About",NORMAL_SIZE, WHITE);
                 draw_string(8,8,"}",NORMAL_SIZE, WHITE); //Up arrow 
   
                 draw_string(0,(16+8*(get_screen_selected_value()-5)),"^",NORMAL_SIZE, WHITE); //Menu cursor
@@ -382,9 +383,31 @@ void redraw_screen(int screen_no)
                 draw_string(0,(16+8*(get_screen_selected_value()-5)),"^",NORMAL_SIZE, WHITE); //Menu cursor
             }
 
-
             break;
 
+        case SCREEN_CF_MENU : 
+            draw_menu_symbols();
+            if (get_screen_selected_value()<5) 
+            {
+                draw_string(0,0,"Colourfade 1/2",NORMAL_SIZE, WHITE);
+                draw_string(8,16,"Mode",NORMAL_SIZE, WHITE);
+                draw_string(8,24,"Scene Enable",NORMAL_SIZE, WHITE);
+                draw_string(8,32,"Time to fade",NORMAL_SIZE, WHITE);
+                draw_string(8,40,"Red Channel",NORMAL_SIZE, WHITE);
+                draw_string(8,48,"Green Channel",NORMAL_SIZE, WHITE);
+                draw_string(8,56,"~",NORMAL_SIZE, WHITE); //Down arrow
+                
+                draw_string(0,(16+8*get_screen_selected_value()),"^",NORMAL_SIZE, WHITE); //Menu cursor
+            }
+            else
+            {
+                draw_string(0,0,"Colourfade 2/2",NORMAL_SIZE, WHITE);
+                draw_string(8,16,"Blue Channel",NORMAL_SIZE, WHITE);
+                draw_string(8,8,"}",NORMAL_SIZE, WHITE); //Up arrow 
+  
+                draw_string(0,(16+8*(get_screen_selected_value()-5)),"^",NORMAL_SIZE, WHITE); //Menu cursor
+            } 
+            break;
 
         case SCREEN_RECALL_SCENE :
             draw_standard_value_screen("Recall Scene", "Select scene to", "recall:"); 
@@ -507,6 +530,63 @@ void redraw_screen(int screen_no)
             break;
         case SCREEN_S2L_L_CH : 
             draw_standard_value_screen("S2L Low Ch", "Select new", "DMX channel:");
+            break;
+
+        case SCREEN_CF_MODE : 
+            draw_menu_symbols();
+
+            draw_string(0,0,"Colourfade Mode",NORMAL_SIZE, WHITE);
+
+            draw_string(8,12,"Select colour-",NORMAL_SIZE, WHITE);
+            draw_string(8,20,"fading mode:",NORMAL_SIZE, WHITE);
+
+            switch (get_screen_selected_value())
+            {
+                case COLOURFADE_MODE_OFF :
+                    draw_string(16,32,"Off",DOUBLE_SIZE, BLACK); 
+                    break;
+                case COLOURFADE_MODE_RGB : 
+                    draw_string(16,32,"RGB",DOUBLE_SIZE, BLACK); 
+                    break;
+            } 
+            break;      
+
+        case SCREEN_CF_ENABLE : 
+            draw_menu_symbols();
+
+            draw_string(0,0,"Colourfade Enable",NORMAL_SIZE, WHITE);
+
+            draw_string(8,12,"Enable colour",NORMAL_SIZE, WHITE);
+            draw_string(8,20,"fade on scenes:",NORMAL_SIZE, WHITE);
+
+            draw_string(48,36,scene_names[get_screen_selected_value()-1],NORMAL_SIZE, WHITE);
+          
+            switch (get_scene_engine_settings().colourfade_enable[get_screen_selected_value()-1])
+            {
+                case pdTRUE :
+                    draw_string(8,32,"On",DOUBLE_SIZE, BLACK); 
+                    break;
+                case pdFALSE : 
+                    draw_string(8,32,"Off",DOUBLE_SIZE, BLACK); 
+                    break;
+            }
+            break;
+
+        case SCREEN_CF_TIME :  
+            draw_standard_value_screen("Colourfade time", "Select new", "fade time:");
+            draw_string(42,38,"seconds",NORMAL_SIZE, WHITE);
+            break;
+
+        case SCREEN_CF_R_CH : 
+            draw_standard_value_screen("Colour Red Ch", "Select new", "DMX channel:");
+            break;
+
+        case SCREEN_CF_G_CH : 
+            draw_standard_value_screen("Colour Green Ch", "Select new", "DMX channel:");
+            break;
+
+        case SCREEN_CF_B_CH : 
+            draw_standard_value_screen("Colour Blue Ch", "Select new", "DMX channel:");
             break;
 
         case SCREEN_UNLOCK_CTRLS : 
