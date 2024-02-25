@@ -136,14 +136,14 @@ void dmx_input_task(void)
                         // if not 0, then RDM or custom protocol
                         if(dtmp[0] == 0)
                         {
-                        dmx_state = DMX_DATA;
-                        // reset dmx adress to 0
-                        current_rx_addr = 0;
-                        //xSemaphoreTake(DMX_Input_Buffer_Mutex, ( TickType_t ) 10 );
-                        // store received timestamp
-                        //TODO - this is the timing thing
-                        last_dmx_packet = xTaskGetTickCount();
-                        //xSemaphoreGive(DMX_Input_Buffer_Mutex);
+                            dmx_state = DMX_DATA;
+                            // reset dmx adress to 0
+                            current_rx_addr = 0;
+                            //xSemaphoreTake(DMX_Input_Buffer_Mutex, ( TickType_t ) 10 );
+                            // store received timestamp
+                            //TODO - this is the timing thing
+                            last_dmx_packet = xTaskGetTickCount();
+                            //xSemaphoreGive(DMX_Input_Buffer_Mutex);
                         }
                     }
                     // check if in data receive mode

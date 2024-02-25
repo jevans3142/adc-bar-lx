@@ -279,32 +279,35 @@ void scene_calc_task(uint8_t *output)
             }
 
             // Colourfade effects
-
-        if ((Scene_Engine_Settings_temp.colourfade_enable[temp_scene_no - 1] == pdTRUE) && (Scene_Engine_Settings_temp.colourfade_mode == COLOURFADE_MODE_RGB))
-        {
-            // Colourfade is active on this scene
-            float time_proportion = 6 * (fmod((float) millis(),(float) (1000*Scene_Engine_Settings_temp.colourfade_time))) / ((float)(1000 * Scene_Engine_Settings_temp.colourfade_time));
+            if ((Scene_Engine_Settings_temp.colourfade_enable[temp_scene_no - 1] == pdTRUE) && (Scene_Engine_Settings_temp.colourfade_mode == COLOURFADE_MODE_RGB))
+            {
+                // Colourfade is active on this scene
+                float time_proportion = 6 * (fmod((float) millis(),(float) (1000*Scene_Engine_Settings_temp.colourfade_time))) / ((float)(1000 * Scene_Engine_Settings_temp.colourfade_time));
+                
+                // Convert HSV to RBG (effectively...)
+                float x = 1 - fabs(fmod(time_proportion,2)-1);
+                float r = 0, g = 0, b = 0;
+                if ((0 <= time_proportion) && (time_proportion <= 1)) { r = 1; g = x; b = 0; } 
+                if ((1 < time_proportion) && (time_proportion <= 2)) { r = x; g = 1; b = 0; } 
+                if ((2 < time_proportion) && (time_proportion <= 3)) { r = 0; g = 1; b = x; } 
+                if ((3 < time_proportion) && (time_proportion <= 4)) { r = 0; g = x; b = 1; } 
+                if ((4 < time_proportion) && (time_proportion <= 5)) { r = x; g = 0; b = 1; } 
+                if ((5 < time_proportion) && (time_proportion <= 6)) { r = 1; g = 0; b = x; } 
             
-            // Convert HSV to RBG (effectively...)
-            float x = 1 - fabs(fmod(time_proportion,2)-1);
-            float r = 0, g = 0, b = 0;
-            if ((0 <= time_proportion) && (time_proportion <= 1)) { r = 1; g = x; b = 0; } 
-            if ((1 < time_proportion) && (time_proportion <= 2)) { r = x; g = 1; b = 0; } 
-            if ((2 < time_proportion) && (time_proportion <= 3)) { r = 0; g = 1; b = x; } 
-            if ((3 < time_proportion) && (time_proportion <= 4)) { r = 0; g = x; b = 1; } 
-            if ((4 < time_proportion) && (time_proportion <= 5)) { r = x; g = 0; b = 1; } 
-            if ((5 < time_proportion) && (time_proportion <= 6)) { r = 1; g = 0; b = x; } 
-        
-            current_state[Scene_Engine_Settings_temp.colourfade_r_ch] = (uint8_t) 255 * r;
-            current_state[Scene_Engine_Settings_temp.colourfade_g_ch] = (uint8_t) 255 * g;
-            current_state[Scene_Engine_Settings_temp.colourfade_b_ch] = (uint8_t) 255 * b;
+                current_state[Scene_Engine_Settings_temp.colourfade_r_ch] = (uint8_t) 255 * r;
+                current_state[Scene_Engine_Settings_temp.colourfade_g_ch] = (uint8_t) 255 * g;
+                current_state[Scene_Engine_Settings_temp.colourfade_b_ch] = (uint8_t) 255 * b;
 
-        }
-
+            }
 
             current_state[0] = 0x00; // Force the DMX start code to be 0x00 for 'dimmer data'
             copy_513(current_state, output);
             xSemaphoreGive(DMX_Buffer_Mutex);
+        }
+        else
+        {
+            // Can't get mutex
+            ESP_LOGW(TAG, "Can't take DMX buffer mutex in scene calc task");
         }
     }
 }
@@ -331,6 +334,10 @@ void store_dmx_input_value(uint16_t address, uint8_t value)
         {
             dmx_in_buffer[address] = value;
             xSemaphoreGive(DMX_Buffer_Mutex);
+        }
+        else 
+        {
+            ESP_LOGW(TAG, "Can't take DMX store mutex");
         }
     }
 }

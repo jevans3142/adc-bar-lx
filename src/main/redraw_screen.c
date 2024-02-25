@@ -6,11 +6,15 @@
 #include "freertos/task.h"
 #include "driver/adc.h"
 #include "esp_timer.h"
+#include "esp_err.h"
+#include "esp_log.h"
 
 #include "main.h"
 #include "redraw_screen.h"
 #include "screen_driver.h"
 #include "scene_engine.h"
+
+static const char *TAG = "redraw_screen";
 
 //Define states and mutexs
 SemaphoreHandle_t Screen_No_Mutex = NULL;
@@ -138,8 +142,8 @@ void set_screen(int new_screen_no, int new_screen_selected)
         {
             set_screen_selected_value(new_screen_selected);
             Screen_No = new_screen_no;
-            redraw_screen(new_screen_no);
             xSemaphoreGive( Screen_No_Mutex );
+            redraw_screen(new_screen_no);
         }
     }
 }
@@ -153,6 +157,10 @@ int get_screen(void)
             int returnval = Screen_No;
             xSemaphoreGive( Screen_No_Mutex );
             return returnval;
+        }
+        else
+        {
+            ESP_LOGW(TAG, "Unable to take mutex in get_screen");
         }
     }
     return NULL;

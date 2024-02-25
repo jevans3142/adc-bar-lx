@@ -12,8 +12,8 @@
 
 //Define screen IDs 
 
-#define SCREEN_MAIN_STATUS 0
-#define SCREEN_MAIN_MENU 1
+#define SCREEN_MAIN_STATUS 1
+#define SCREEN_MAIN_MENU 2
 
 #define SCREEN_RECALL_SCENE 10
 #define SCREEN_RECORD_SCENE 11
