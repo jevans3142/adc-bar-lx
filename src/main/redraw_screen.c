@@ -467,7 +467,7 @@ void redraw_screen(int screen_no)
             {
                 case 0 : 
                     draw_string(0,0,"About 1/2",NORMAL_SIZE, WHITE);
-                    draw_string(8,16,"Software v1.0",NORMAL_SIZE, WHITE);
+                    draw_string(8,16,"Software v1.1",NORMAL_SIZE, WHITE);
                     draw_string(8,32,"Created by",NORMAL_SIZE, WHITE);
                     draw_string(12,40,"John Evans",NORMAL_SIZE, WHITE);
                     draw_string(12,48,"john@jhevans.com",NORMAL_SIZE, WHITE);
