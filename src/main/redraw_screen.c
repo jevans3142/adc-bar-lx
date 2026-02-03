@@ -62,7 +62,7 @@ static void draw_standard_value_screen(const char* title, const char* line1, con
     draw_string(8,20,line2,NORMAL_SIZE, WHITE);
 
     sprintf(string_buffer,"%u",get_screen_selected_value());
-    draw_string(16,32,&string_buffer,DOUBLE_SIZE, BLACK);
+    draw_string(16,32,string_buffer,DOUBLE_SIZE, BLACK);
 }
 
 void setup_menu_mutexs(void)
@@ -107,7 +107,7 @@ int get_display_active_status(void)
             return returnval;
         }
     }
-    return NULL; 
+    return 0; 
 }
 
 int reset_display_active_status(void)
@@ -163,7 +163,7 @@ int get_screen(void)
             ESP_LOGW(TAG, "Unable to take mutex in get_screen");
         }
     }
-    return NULL;
+    return 0;
 }
 
 //========================
@@ -230,7 +230,7 @@ int get_screen_selected_value(void)
             return returnval;
         }
     }
-    return NULL;
+    return 0;
 }
 
 //========================
@@ -259,7 +259,7 @@ int get_lock_code(void)
             return returnval;
         }
     }
-    return NULL;
+    return 0;
 }
 
 //========================
@@ -307,7 +307,7 @@ void redraw_screen(int screen_no)
             draw_line(0,22,128,22, WHITE);
             draw_line(64,22,64,64, WHITE);
             sprintf(string_buffer,"%u",get_scene());
-            draw_string(5,6,&string_buffer,NORMAL_SIZE, WHITE);
+            draw_string(5,6,string_buffer,NORMAL_SIZE, WHITE);
             draw_rect(2,4,13,14, WHITE, LEAVE);
             draw_string(15,2,scene_names[get_scene()-1],DOUBLE_SIZE, WHITE);
             
@@ -476,15 +476,15 @@ void redraw_screen(int screen_no)
                     draw_string(0,0,"About 2/2",NORMAL_SIZE, WHITE);
                     draw_string(0,16,"StackWMks:",NORMAL_SIZE, WHITE);
                     sprintf(string_buffer,"DMXO:%u",uxTaskGetStackHighWaterMark(DMX_Output_Task_Handle));
-                    draw_string(0,24,&string_buffer,NORMAL_SIZE, WHITE);
+                    draw_string(0,24,string_buffer,NORMAL_SIZE, WHITE);
                     sprintf(string_buffer,"DMXI:%u",uxTaskGetStackHighWaterMark(DMX_Input_Task_Handle));
-                    draw_string(0,32,&string_buffer,NORMAL_SIZE, WHITE);
+                    draw_string(0,32,string_buffer,NORMAL_SIZE, WHITE);
                     sprintf(string_buffer,"BtPo:%u",uxTaskGetStackHighWaterMark(Button_Poll_Task_Handle));
-                    draw_string(0,40,&string_buffer,NORMAL_SIZE, WHITE);
+                    draw_string(0,40,string_buffer,NORMAL_SIZE, WHITE);
                     sprintf(string_buffer,"DisT:%u",uxTaskGetStackHighWaterMark(Display_Timeout_Task_Handle));
-                    draw_string(0,48,&string_buffer,NORMAL_SIZE, WHITE);
+                    draw_string(0,48,string_buffer,NORMAL_SIZE, WHITE);
                     sprintf(string_buffer,"S2LR:%u",uxTaskGetStackHighWaterMark(S2l_Meter_Refresh_Handle));
-                    draw_string(64,48,&string_buffer,NORMAL_SIZE, WHITE);
+                    draw_string(64,48,string_buffer,NORMAL_SIZE, WHITE);
                     break;
             }   
             break;

@@ -114,27 +114,25 @@ void dmx_input_task(void)
     uart_set_mode(uart_num, UART_MODE_RS485_HALF_DUPLEX);
 
     uart_event_t event;
-    uint8_t* dtmp = (uint8_t*) malloc(1024);
+    uint8_t uart_temp_buffer[1024];
 
     while(1)
     {
         // wait for data in the dmx_queue
         if(xQueueReceive(dmx_input_queue, (void * )&event, ( TickType_t ) 10))
         {
-            for (int i=0;i<1025;i++)
-            {
-                dtmp[i]=0;
-            }
+            memset(uart_temp_buffer, 0, sizeof(uart_temp_buffer));
+
             switch(event.type)
             {
                 case UART_DATA:
                     // read the received data
-                    uart_read_bytes(DMX_IN_PORT, dtmp, event.size, ( TickType_t ) 10);
+                    uart_read_bytes(DMX_IN_PORT, uart_temp_buffer, event.size, ( TickType_t ) 10);
                     // check if break detected
                     if(dmx_state == DMX_BREAK)
                     {
                         // if not 0, then RDM or custom protocol
-                        if(dtmp[0] == 0)
+                        if(uart_temp_buffer[0] == 0)
                         {
                             dmx_state = DMX_DATA;
                             // reset dmx adress to 0
@@ -155,7 +153,7 @@ void dmx_input_task(void)
                             if(current_rx_addr < 513)
                             {
                                 //TODO: This takes the mutex loads of times... can we do better?
-                                store_dmx_input_value(current_rx_addr++, dtmp[i]);
+                                store_dmx_input_value(current_rx_addr++, uart_temp_buffer[i]);
                             }
                         }
                     }

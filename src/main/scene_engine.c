@@ -173,7 +173,7 @@ int get_scene(void)
         }
     }
     ESP_LOGW(TAG, "Get scene getter func fail");
-    return NULL;
+    return 0;
 }
 
 void set_scene_engine_settings(struct Scene_Engine_Settings_Struct new_Scene_Engine_Settings)
@@ -246,7 +246,6 @@ void scene_calc_task(uint8_t *output)
                 // DMX input is currently in HTP mode
                 htp_513(current_state, dmx_in_buffer);
             }
-            
 
             // Sound to light effects
             // TODO: Make this work with fading?
@@ -282,22 +281,51 @@ void scene_calc_task(uint8_t *output)
             if ((Scene_Engine_Settings_temp.colourfade_enable[temp_scene_no - 1] == pdTRUE) && (Scene_Engine_Settings_temp.colourfade_mode == COLOURFADE_MODE_RGB))
             {
                 // Colourfade is active on this scene
-                float time_proportion = 6 * (fmod((float) millis(),(float) (1000*Scene_Engine_Settings_temp.colourfade_time))) / ((float)(1000 * Scene_Engine_Settings_temp.colourfade_time));
-                
-                // Convert HSV to RBG (effectively...)
-                float x = 1 - fabs(fmod(time_proportion,2)-1);
-                float r = 0, g = 0, b = 0;
-                if ((0 <= time_proportion) && (time_proportion <= 1)) { r = 1; g = x; b = 0; } 
-                if ((1 < time_proportion) && (time_proportion <= 2)) { r = x; g = 1; b = 0; } 
-                if ((2 < time_proportion) && (time_proportion <= 3)) { r = 0; g = 1; b = x; } 
-                if ((3 < time_proportion) && (time_proportion <= 4)) { r = 0; g = x; b = 1; } 
-                if ((4 < time_proportion) && (time_proportion <= 5)) { r = x; g = 0; b = 1; } 
-                if ((5 < time_proportion) && (time_proportion <= 6)) { r = 1; g = 0; b = x; } 
-            
-                current_state[Scene_Engine_Settings_temp.colourfade_r_ch] = (uint8_t) 255 * r;
-                current_state[Scene_Engine_Settings_temp.colourfade_g_ch] = (uint8_t) 255 * g;
-                current_state[Scene_Engine_Settings_temp.colourfade_b_ch] = (uint8_t) 255 * b;
+                float time_proportion = 6 * (fmod((float)millis(), (float)(1000 * Scene_Engine_Settings_temp.colourfade_time))) / ((float)(1000 * Scene_Engine_Settings_temp.colourfade_time));
 
+                // Convert HSV to RBG (effectively...)
+                float x = 1 - fabs(fmod(time_proportion, 2) - 1);
+                float r = 0, g = 0, b = 0;
+                if ((0 <= time_proportion) && (time_proportion <= 1))
+                {
+                    r = 1;
+                    g = x;
+                    b = 0;
+                }
+                if ((1 < time_proportion) && (time_proportion <= 2))
+                {
+                    r = x;
+                    g = 1;
+                    b = 0;
+                }
+                if ((2 < time_proportion) && (time_proportion <= 3))
+                {
+                    r = 0;
+                    g = 1;
+                    b = x;
+                }
+                if ((3 < time_proportion) && (time_proportion <= 4))
+                {
+                    r = 0;
+                    g = x;
+                    b = 1;
+                }
+                if ((4 < time_proportion) && (time_proportion <= 5))
+                {
+                    r = x;
+                    g = 0;
+                    b = 1;
+                }
+                if ((5 < time_proportion) && (time_proportion <= 6))
+                {
+                    r = 1;
+                    g = 0;
+                    b = x;
+                }
+
+                current_state[Scene_Engine_Settings_temp.colourfade_r_ch] = (uint8_t)255 * r;
+                current_state[Scene_Engine_Settings_temp.colourfade_g_ch] = (uint8_t)255 * g;
+                current_state[Scene_Engine_Settings_temp.colourfade_b_ch] = (uint8_t)255 * b;
             }
 
             current_state[0] = 0x00; // Force the DMX start code to be 0x00 for 'dimmer data'
@@ -335,7 +363,7 @@ void store_dmx_input_value(uint16_t address, uint8_t value)
             dmx_in_buffer[address] = value;
             xSemaphoreGive(DMX_Buffer_Mutex);
         }
-        else 
+        else
         {
             ESP_LOGW(TAG, "Can't take DMX store mutex");
         }
